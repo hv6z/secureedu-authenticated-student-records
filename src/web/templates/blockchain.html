@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Chuỗi kiểm toán | Hồ sơ sinh viên{% endblock %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <span class="eyebrow">Sổ nhật ký liên kết băm</span>
+    <h1>Chuỗi kiểm toán</h1>
+    <p>Mỗi thay đổi hồ sơ tạo một khối liên kết với giá trị băm của khối trước.</p>
+  </div>
+  <a class="button button-secondary" href="{{ url_for('web.verification') }}">Kiểm tra toàn chuỗi</a>
+</header>
+
+<div class="notice notice-info">
+  <strong>Chuỗi riêng tư một nút</strong>
+  <span>Đây là sổ nhật ký chống sửa đổi phục vụ nghiên cứu, không phải mạng chuỗi khối phân tán.</span>
+</div>
+
+<section class="chain-list" aria-label="Danh sách khối">
+  {% for block in blocks|reverse %}
+    <article class="block-card {{ 'genesis-card' if block.operation == 'GENESIS' else '' }}">
+      <div class="chain-rail" aria-hidden="true"><span></span></div>
+      <div class="block-index"><small>Khối</small><strong>{{ block.block_index }}</strong></div>
+      <div class="block-content">
+        <div class="block-topline">
+          <span class="operation operation-{{ block.operation|lower }}">{{ operation_label(block.operation) }}</span>
+          <time>{{ block.timestamp[:19].replace('T', ' ') }} UTC</time>
+        </div>
+        {% if block.operation != 'GENESIS' %}
+          <div class="block-facts">
+            <div><span>Mã hồ sơ</span><a href="{{ url_for('web.student_detail', record_id=block.record_id) }}"><code>{{ block.record_id }}</code></a></div>
+            <div><span>Phiên bản</span><strong>v{{ block.version }}</strong></div>
+            <div><span>Người thao tác</span><strong>{{ role_label(block.actor_role) }}</strong><code title="{{ block.actor_id }}">{{ block.actor_id[:13] }}{{ '…' if block.actor_id|length > 13 else '' }}</code></div>
+          </div>
+        {% else %}
+          <p class="genesis-copy">Khối cố định mở đầu chuỗi và tạo mốc kiểm tra cho khối tiếp theo.</p>
+        {% endif %}
+        <div class="hash-grid">
+          <div><span>Giá trị băm khối trước</span><code title="{{ block.previous_hash }}">{{ block.previous_hash }}</code></div>
+          <div><span>Giá trị băm gói mã hóa</span><code title="{{ block.envelope_hash }}">{{ block.envelope_hash }}</code></div>
+          <div class="current-hash"><span>Giá trị băm khối hiện tại</span><code title="{{ block.block_hash }}">{{ block.block_hash }}</code></div>
+        </div>
+      </div>
+    </article>
+  {% else %}
+    <div class="empty-state panel"><h2>Chuỗi chưa được khởi tạo</h2><p>Hãy khởi tạo cơ sở dữ liệu trước khi sử dụng.</p></div>
+  {% endfor %}
+</section>
+{% endblock %}

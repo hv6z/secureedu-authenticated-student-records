@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% set editing = form_mode == 'edit' %}
+{% block title %}{{ 'Cập nhật' if editing else 'Thêm' }} sinh viên | Hồ sơ sinh viên{% endblock %}
+{% block content %}
+<header class="page-header narrow-header">
+  <div>
+    <a class="back-link" href="{{ url_for('web.student_detail', record_id=student._record_id) if editing else url_for('web.students') }}">← Quay lại</a>
+    <span class="eyebrow">{{ 'Phiên bản mới' if editing else 'Hồ sơ mới' }}</span>
+    <h1>{{ 'Cập nhật hồ sơ sinh viên' if editing else 'Thêm hồ sơ sinh viên' }}</h1>
+    <p>{{ 'Thay đổi sẽ tạo một phiên bản mã hóa và một khối kiểm toán mới.' if editing else 'Thông tin sẽ được chuẩn hóa và mã hóa trước khi lưu.' }}</p>
+  </div>
+</header>
+
+<form method="post" class="record-form" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {% if editing %}<input type="hidden" name="expected_version" value="{{ student._version }}">{% endif %}
+
+  <section class="panel form-section">
+    <div class="section-heading"><span class="section-number">01</span><div><h2>Thông tin cá nhân</h2><p>Các trường có dấu sao là bắt buộc.</p></div></div>
+    <div class="form-grid">
+      <label class="field"><span>Mã sinh viên <b>*</b></span><input name="student_code" value="{{ student.get('student_code', '') }}" autocomplete="off" maxlength="50" required placeholder="Ví dụ: SV001"></label>
+      <label class="field"><span>Họ và tên <b>*</b></span><input name="full_name" value="{{ student.get('full_name', '') }}" autocomplete="name" maxlength="160" required placeholder="Nhập họ và tên"></label>
+      <label class="field"><span>Ngày sinh <b>*</b></span><input type="date" name="date_of_birth" value="{{ student.get('date_of_birth', '') }}" required></label>
+      <label class="field"><span>Chương trình học <b>*</b></span><input name="program" value="{{ student.get('program', '') }}" maxlength="160" required placeholder="Ví dụ: An toàn thông tin"></label>
+      <label class="field field-small"><span>Điểm trung bình <b>*</b></span><input type="number" name="gpa" value="{{ student.get('gpa', '') }}" min="0" max="10" step="0.01" inputmode="decimal" required placeholder="0 đến 10"></label>
+    </div>
+  </section>
+
+  <section class="panel form-section">
+    <div class="section-heading course-heading">
+      <span class="section-number">02</span>
+      <div><h2>Danh sách học phần</h2><p>Thêm một hoặc nhiều học phần và điểm tương ứng.</p></div>
+      <button class="button button-soft add-course" type="button" data-add-course>Thêm học phần</button>
+    </div>
+    <div class="course-list" data-course-list>
+      {% set courses = student.get('courses') or [{}] %}
+      {% for course in courses %}
+        <div class="course-row">
+          <span class="course-index" aria-hidden="true">{{ loop.index }}</span>
+          <label class="field"><span>Mã học phần <b>*</b></span><input name="course_code" value="{{ course.get('course_code', '') }}" maxlength="50" required placeholder="MMH101"></label>
+          <label class="field"><span>Tên học phần</span><input name="course_name" value="{{ course.get('course_name', '') }}" maxlength="160" placeholder="Mật mã học"></label>
+          <label class="field score-field"><span>Điểm <b>*</b></span><input type="number" name="score" value="{{ course.get('score', '') }}" min="0" max="10" step="0.01" inputmode="decimal" required placeholder="0 đến 10"></label>
+          <button class="remove-course" type="button" data-remove-course aria-label="Xóa học phần">×</button>
+        </div>
+      {% endfor %}
+    </div>
+    <template id="course-row-template">
+      <div class="course-row">
+        <span class="course-index" aria-hidden="true"></span>
+        <label class="field"><span>Mã học phần <b>*</b></span><input name="course_code" maxlength="50" required placeholder="MMH101"></label>
+        <label class="field"><span>Tên học phần</span><input name="course_name" maxlength="160" placeholder="Mật mã học"></label>
+        <label class="field score-field"><span>Điểm <b>*</b></span><input type="number" name="score" min="0" max="10" step="0.01" inputmode="decimal" required placeholder="0 đến 10"></label>
+        <button class="remove-course" type="button" data-remove-course aria-label="Xóa học phần">×</button>
+      </div>
+    </template>
+  </section>
+
+  <div class="form-actions">
+    <a class="button button-secondary" href="{{ url_for('web.student_detail', record_id=student._record_id) if editing else url_for('web.students') }}">Hủy</a>
+    <button class="button button-primary" type="submit">{{ 'Lưu phiên bản mới' if editing else 'Mã hóa và tạo hồ sơ' }}</button>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,2162 @@
+[
+  {
+    "student_code": "SV0000001",
+    "full_name": "Trần Hoài Trang",
+    "date_of_birth": "2006-09-28",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.51
+      }
+    ],
+    "gpa": 7.51
+  },
+  {
+    "student_code": "SV0000002",
+    "full_name": "Vũ Hoài Linh",
+    "date_of_birth": "2006-07-02",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 8.07
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.55
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.08
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.25
+      }
+    ],
+    "gpa": 7.49
+  },
+  {
+    "student_code": "SV0000003",
+    "full_name": "Hoàng Ngọc Chi",
+    "date_of_birth": "2004-04-11",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.57
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.38
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.7
+      }
+    ],
+    "gpa": 6.55
+  },
+  {
+    "student_code": "SV0000004",
+    "full_name": "Trần Hải Trang",
+    "date_of_birth": "2005-09-26",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.82
+      }
+    ],
+    "gpa": 6.82
+  },
+  {
+    "student_code": "SV0000005",
+    "full_name": "Đặng Quốc Linh",
+    "date_of_birth": "2006-07-05",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 7.53
+      }
+    ],
+    "gpa": 7.53
+  },
+  {
+    "student_code": "SV0000006",
+    "full_name": "Nguyễn Thị Trang",
+    "date_of_birth": "2002-06-13",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.12
+      }
+    ],
+    "gpa": 6.12
+  },
+  {
+    "student_code": "SV0000007",
+    "full_name": "Đặng Quốc Phương",
+    "date_of_birth": "2003-10-26",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.13
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 7.28
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 7.35
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.65
+      }
+    ],
+    "gpa": 8.1
+  },
+  {
+    "student_code": "SV0000008",
+    "full_name": "Bùi Thanh Dũng",
+    "date_of_birth": "2006-11-12",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.05
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.75
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 9.41
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.8
+      }
+    ],
+    "gpa": 7.5
+  },
+  {
+    "student_code": "SV0000009",
+    "full_name": "Hoàng Ngọc Chi",
+    "date_of_birth": "2006-10-12",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 9.16
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.58
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.58
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.49
+      }
+    ],
+    "gpa": 7.7
+  },
+  {
+    "student_code": "SV0000010",
+    "full_name": "Trần Văn Nam",
+    "date_of_birth": "2001-02-27",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.48
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.74
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 7.06
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 7.25
+      }
+    ],
+    "gpa": 7.13
+  },
+  {
+    "student_code": "SV0000011",
+    "full_name": "Vũ Minh An",
+    "date_of_birth": "2004-01-05",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.11
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 8.76
+      }
+    ],
+    "gpa": 8.43
+  },
+  {
+    "student_code": "SV0000012",
+    "full_name": "Lê Quốc Phương",
+    "date_of_birth": "2002-10-18",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.79
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 9.38
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 7.52
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.42
+      }
+    ],
+    "gpa": 8.03
+  },
+  {
+    "student_code": "SV0000013",
+    "full_name": "Nguyễn Văn Phương",
+    "date_of_birth": "2004-12-18",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.79
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.95
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.37
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.17
+      }
+    ],
+    "gpa": 7.82
+  },
+  {
+    "student_code": "SV0000014",
+    "full_name": "Lê Hoài Linh",
+    "date_of_birth": "2002-12-01",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.57
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 7.49
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 7.33
+      }
+    ],
+    "gpa": 8.13
+  },
+  {
+    "student_code": "SV0000015",
+    "full_name": "Bùi Hoài Nam",
+    "date_of_birth": "2001-07-17",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.74
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.17
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.24
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.87
+      }
+    ],
+    "gpa": 6.75
+  },
+  {
+    "student_code": "SV0000016",
+    "full_name": "Lê Minh Linh",
+    "date_of_birth": "2002-07-19",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 8.93
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 7.58
+      }
+    ],
+    "gpa": 8.25
+  },
+  {
+    "student_code": "SV0000017",
+    "full_name": "Hoàng Ngọc Chi",
+    "date_of_birth": "2005-08-30",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.52
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 6.72
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 6.32
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 7.49
+      }
+    ],
+    "gpa": 6.76
+  },
+  {
+    "student_code": "SV0000018",
+    "full_name": "Vũ Hải Phương",
+    "date_of_birth": "2006-02-04",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 9.08
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.24
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.16
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.77
+      }
+    ],
+    "gpa": 8.56
+  },
+  {
+    "student_code": "SV0000019",
+    "full_name": "Phạm Thị Trang",
+    "date_of_birth": "2004-12-11",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.23
+      }
+    ],
+    "gpa": 9.23
+  },
+  {
+    "student_code": "SV0000020",
+    "full_name": "Trần Quốc Bình",
+    "date_of_birth": "2002-06-28",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.81
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.35
+      }
+    ],
+    "gpa": 8.08
+  },
+  {
+    "student_code": "SV0000021",
+    "full_name": "Trần Thanh Hà",
+    "date_of_birth": "2003-01-30",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 8.8
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 8.61
+      }
+    ],
+    "gpa": 8.71
+  },
+  {
+    "student_code": "SV0000022",
+    "full_name": "Đặng Văn An",
+    "date_of_birth": "2003-11-19",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.28
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.07
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 9.33
+      }
+    ],
+    "gpa": 6.89
+  },
+  {
+    "student_code": "SV0000023",
+    "full_name": "Vũ Ngọc Trang",
+    "date_of_birth": "2004-12-05",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.62
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.43
+      }
+    ],
+    "gpa": 7.03
+  },
+  {
+    "student_code": "SV0000024",
+    "full_name": "Hoàng Hải Hà",
+    "date_of_birth": "2006-08-16",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.13
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.38
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 5.6
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 6.87
+      }
+    ],
+    "gpa": 7.0
+  },
+  {
+    "student_code": "SV0000025",
+    "full_name": "Vũ Quốc Bình",
+    "date_of_birth": "2004-02-27",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 9.39
+      }
+    ],
+    "gpa": 9.39
+  },
+  {
+    "student_code": "SV0000026",
+    "full_name": "Trần Văn Chi",
+    "date_of_birth": "2002-05-18",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 5.99
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.28
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 9.99
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.81
+      }
+    ],
+    "gpa": 6.77
+  },
+  {
+    "student_code": "SV0000027",
+    "full_name": "Phạm Minh Chi",
+    "date_of_birth": "2005-09-21",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.63
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 7.08
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.89
+      }
+    ],
+    "gpa": 6.53
+  },
+  {
+    "student_code": "SV0000028",
+    "full_name": "Trần Minh Phương",
+    "date_of_birth": "2002-07-22",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 5.08
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 7.71
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 7.09
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 9.79
+      }
+    ],
+    "gpa": 7.42
+  },
+  {
+    "student_code": "SV0000029",
+    "full_name": "Nguyễn Hoài Phương",
+    "date_of_birth": "2006-04-12",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.29
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 5.06
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.89
+      }
+    ],
+    "gpa": 7.75
+  },
+  {
+    "student_code": "SV0000030",
+    "full_name": "Hoàng Hoài Chi",
+    "date_of_birth": "2006-04-26",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.72
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 6.0
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.8
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.19
+      }
+    ],
+    "gpa": 6.93
+  },
+  {
+    "student_code": "SV0000031",
+    "full_name": "Đặng Văn Chi",
+    "date_of_birth": "2006-11-14",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 9.75
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.07
+      }
+    ],
+    "gpa": 9.41
+  },
+  {
+    "student_code": "SV0000032",
+    "full_name": "Phạm Quốc Trang",
+    "date_of_birth": "2006-12-25",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.57
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 5.5
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.52
+      }
+    ],
+    "gpa": 7.86
+  },
+  {
+    "student_code": "SV0000033",
+    "full_name": "Phạm Minh Hà",
+    "date_of_birth": "2001-06-20",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.43
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.66
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.67
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 6.31
+      }
+    ],
+    "gpa": 6.77
+  },
+  {
+    "student_code": "SV0000034",
+    "full_name": "Đặng Thanh Phương",
+    "date_of_birth": "2006-05-21",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 5.94
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.74
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.05
+      }
+    ],
+    "gpa": 6.58
+  },
+  {
+    "student_code": "SV0000035",
+    "full_name": "Lê Văn Bình",
+    "date_of_birth": "2002-08-16",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 6.57
+      }
+    ],
+    "gpa": 6.57
+  },
+  {
+    "student_code": "SV0000036",
+    "full_name": "Trần Thanh Nam",
+    "date_of_birth": "2002-06-03",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 6.08
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 5.77
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.05
+      }
+    ],
+    "gpa": 6.63
+  },
+  {
+    "student_code": "SV0000037",
+    "full_name": "Trần Thanh Nam",
+    "date_of_birth": "2004-05-19",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 6.31
+      }
+    ],
+    "gpa": 6.31
+  },
+  {
+    "student_code": "SV0000038",
+    "full_name": "Bùi Thanh Bình",
+    "date_of_birth": "2005-01-09",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.59
+      }
+    ],
+    "gpa": 7.59
+  },
+  {
+    "student_code": "SV0000039",
+    "full_name": "Phạm Minh Khánh",
+    "date_of_birth": "2003-12-23",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.89
+      }
+    ],
+    "gpa": 8.89
+  },
+  {
+    "student_code": "SV0000040",
+    "full_name": "Vũ Hải Trang",
+    "date_of_birth": "2004-11-28",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.57
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.98
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 7.32
+      }
+    ],
+    "gpa": 6.62
+  },
+  {
+    "student_code": "SV0000041",
+    "full_name": "Đặng Quốc Khánh",
+    "date_of_birth": "2002-06-07",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.72
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.28
+      }
+    ],
+    "gpa": 8.5
+  },
+  {
+    "student_code": "SV0000042",
+    "full_name": "Trần Quốc Hà",
+    "date_of_birth": "2002-08-11",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 5.73
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.13
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 6.17
+      }
+    ],
+    "gpa": 6.68
+  },
+  {
+    "student_code": "SV0000043",
+    "full_name": "Phạm Hải Khánh",
+    "date_of_birth": "2006-10-18",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.37
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 6.68
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.4
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.61
+      }
+    ],
+    "gpa": 8.27
+  },
+  {
+    "student_code": "SV0000044",
+    "full_name": "Hoàng Quốc Chi",
+    "date_of_birth": "2001-02-13",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.62
+      }
+    ],
+    "gpa": 8.62
+  },
+  {
+    "student_code": "SV0000045",
+    "full_name": "Vũ Văn Dũng",
+    "date_of_birth": "2004-01-06",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.19
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.1
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.6
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.26
+      }
+    ],
+    "gpa": 6.54
+  },
+  {
+    "student_code": "SV0000046",
+    "full_name": "Lê Thanh Dũng",
+    "date_of_birth": "2002-01-27",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.78
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 5.94
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 8.84
+      }
+    ],
+    "gpa": 7.52
+  },
+  {
+    "student_code": "SV0000047",
+    "full_name": "Lê Thị An",
+    "date_of_birth": "2005-09-05",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 8.53
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.42
+      }
+    ],
+    "gpa": 6.97
+  },
+  {
+    "student_code": "SV0000048",
+    "full_name": "Vũ Ngọc Hà",
+    "date_of_birth": "2004-11-24",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.94
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.55
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.29
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.71
+      }
+    ],
+    "gpa": 8.62
+  },
+  {
+    "student_code": "SV0000049",
+    "full_name": "Bùi Hoài Khánh",
+    "date_of_birth": "2003-11-06",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.45
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.11
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 9.04
+      }
+    ],
+    "gpa": 7.2
+  },
+  {
+    "student_code": "SV0000050",
+    "full_name": "Hoàng Ngọc Trang",
+    "date_of_birth": "2006-09-16",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.07
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.31
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 8.63
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 8.23
+      }
+    ],
+    "gpa": 8.81
+  },
+  {
+    "student_code": "SV0000051",
+    "full_name": "Hoàng Hải Bình",
+    "date_of_birth": "2002-12-16",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 6.7
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 5.91
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 9.94
+      }
+    ],
+    "gpa": 7.52
+  },
+  {
+    "student_code": "SV0000052",
+    "full_name": "Lê Hoài Hà",
+    "date_of_birth": "2005-10-24",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 6.2
+      }
+    ],
+    "gpa": 6.2
+  },
+  {
+    "student_code": "SV0000053",
+    "full_name": "Phạm Minh Trang",
+    "date_of_birth": "2006-12-22",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.82
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.25
+      }
+    ],
+    "gpa": 7.54
+  },
+  {
+    "student_code": "SV0000054",
+    "full_name": "Hoàng Minh Chi",
+    "date_of_birth": "2004-02-23",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.01
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.33
+      }
+    ],
+    "gpa": 9.17
+  },
+  {
+    "student_code": "SV0000055",
+    "full_name": "Đặng Ngọc Phương",
+    "date_of_birth": "2002-09-23",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.93
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.27
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.93
+      }
+    ],
+    "gpa": 5.71
+  },
+  {
+    "student_code": "SV0000056",
+    "full_name": "Lê Văn Nam",
+    "date_of_birth": "2004-08-22",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.46
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.4
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 7.03
+      }
+    ],
+    "gpa": 6.96
+  },
+  {
+    "student_code": "SV0000057",
+    "full_name": "Vũ Văn Chi",
+    "date_of_birth": "2003-11-20",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 6.77
+      }
+    ],
+    "gpa": 6.77
+  },
+  {
+    "student_code": "SV0000058",
+    "full_name": "Lê Hoài Dũng",
+    "date_of_birth": "2003-03-28",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.32
+      }
+    ],
+    "gpa": 8.32
+  },
+  {
+    "student_code": "SV0000059",
+    "full_name": "Bùi Thanh Dũng",
+    "date_of_birth": "2005-09-30",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.68
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.35
+      }
+    ],
+    "gpa": 8.52
+  },
+  {
+    "student_code": "SV0000060",
+    "full_name": "Trần Minh Dũng",
+    "date_of_birth": "2002-10-10",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 8.7
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.58
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.39
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.57
+      }
+    ],
+    "gpa": 7.06
+  },
+  {
+    "student_code": "SV0000061",
+    "full_name": "Hoàng Thanh Linh",
+    "date_of_birth": "2004-01-06",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 7.73
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.72
+      }
+    ],
+    "gpa": 6.72
+  },
+  {
+    "student_code": "SV0000062",
+    "full_name": "Bùi Hải Trang",
+    "date_of_birth": "2005-01-10",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.44
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.69
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.97
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.8
+      }
+    ],
+    "gpa": 7.48
+  },
+  {
+    "student_code": "SV0000063",
+    "full_name": "Trần Quốc Hà",
+    "date_of_birth": "2006-12-13",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.34
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 7.73
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.98
+      }
+    ],
+    "gpa": 8.02
+  },
+  {
+    "student_code": "SV0000064",
+    "full_name": "Bùi Thị Linh",
+    "date_of_birth": "2006-12-02",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 5.21
+      }
+    ],
+    "gpa": 5.21
+  },
+  {
+    "student_code": "SV0000065",
+    "full_name": "Nguyễn Văn Bình",
+    "date_of_birth": "2003-11-11",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 5.67
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.53
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.46
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 7.67
+      }
+    ],
+    "gpa": 6.08
+  },
+  {
+    "student_code": "SV0000066",
+    "full_name": "Đặng Hoài Phương",
+    "date_of_birth": "2003-09-21",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 6.21
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.58
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.34
+      }
+    ],
+    "gpa": 7.38
+  },
+  {
+    "student_code": "SV0000067",
+    "full_name": "Nguyễn Ngọc Dũng",
+    "date_of_birth": "2006-06-01",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 7.19
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.84
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.94
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.95
+      }
+    ],
+    "gpa": 7.98
+  },
+  {
+    "student_code": "SV0000068",
+    "full_name": "Hoàng Hoài Phương",
+    "date_of_birth": "2002-07-29",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.33
+      }
+    ],
+    "gpa": 7.33
+  },
+  {
+    "student_code": "SV0000069",
+    "full_name": "Vũ Hoài Trang",
+    "date_of_birth": "2002-05-16",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.01
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 7.6
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.77
+      }
+    ],
+    "gpa": 8.46
+  },
+  {
+    "student_code": "SV0000070",
+    "full_name": "Đặng Văn Dũng",
+    "date_of_birth": "2005-08-31",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 9.04
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 9.01
+      }
+    ],
+    "gpa": 9.02
+  },
+  {
+    "student_code": "SV0000071",
+    "full_name": "Hoàng Thanh Bình",
+    "date_of_birth": "2002-11-24",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 8.76
+      }
+    ],
+    "gpa": 8.76
+  },
+  {
+    "student_code": "SV0000072",
+    "full_name": "Bùi Văn Khánh",
+    "date_of_birth": "2002-04-19",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 8.53
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.15
+      }
+    ],
+    "gpa": 8.34
+  },
+  {
+    "student_code": "SV0000073",
+    "full_name": "Nguyễn Quốc Bình",
+    "date_of_birth": "2006-05-27",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.25
+      }
+    ],
+    "gpa": 8.25
+  },
+  {
+    "student_code": "SV0000074",
+    "full_name": "Nguyễn Ngọc Hà",
+    "date_of_birth": "2004-03-21",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.02
+      }
+    ],
+    "gpa": 6.02
+  },
+  {
+    "student_code": "SV0000075",
+    "full_name": "Phạm Hải Nam",
+    "date_of_birth": "2004-12-12",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.48
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.27
+      }
+    ],
+    "gpa": 6.38
+  },
+  {
+    "student_code": "SV0000076",
+    "full_name": "Lê Minh Dũng",
+    "date_of_birth": "2005-12-12",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 7.07
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.78
+      }
+    ],
+    "gpa": 7.43
+  },
+  {
+    "student_code": "SV0000077",
+    "full_name": "Bùi Thị An",
+    "date_of_birth": "2002-11-23",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.0
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.92
+      }
+    ],
+    "gpa": 8.46
+  },
+  {
+    "student_code": "SV0000078",
+    "full_name": "Phạm Ngọc Chi",
+    "date_of_birth": "2006-10-18",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.9
+      }
+    ],
+    "gpa": 9.9
+  },
+  {
+    "student_code": "SV0000079",
+    "full_name": "Bùi Hải Trang",
+    "date_of_birth": "2002-01-02",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.69
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.07
+      }
+    ],
+    "gpa": 7.38
+  },
+  {
+    "student_code": "SV0000080",
+    "full_name": "Lê Quốc Phương",
+    "date_of_birth": "2004-05-29",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 6.26
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 5.58
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.39
+      }
+    ],
+    "gpa": 7.08
+  },
+  {
+    "student_code": "SV0000081",
+    "full_name": "Bùi Thị Dũng",
+    "date_of_birth": "2002-12-20",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.6
+      }
+    ],
+    "gpa": 9.6
+  },
+  {
+    "student_code": "SV0000082",
+    "full_name": "Hoàng Minh Linh",
+    "date_of_birth": "2006-12-01",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 5.57
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.64
+      }
+    ],
+    "gpa": 5.61
+  },
+  {
+    "student_code": "SV0000083",
+    "full_name": "Đặng Văn Nam",
+    "date_of_birth": "2002-09-09",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.04
+      }
+    ],
+    "gpa": 8.04
+  },
+  {
+    "student_code": "SV0000084",
+    "full_name": "Trần Hải Hà",
+    "date_of_birth": "2005-12-23",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.16
+      }
+    ],
+    "gpa": 9.16
+  },
+  {
+    "student_code": "SV0000085",
+    "full_name": "Phạm Hoài Hà",
+    "date_of_birth": "2001-05-06",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.35
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 9.3
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.09
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 5.51
+      }
+    ],
+    "gpa": 7.81
+  },
+  {
+    "student_code": "SV0000086",
+    "full_name": "Vũ Hải Dũng",
+    "date_of_birth": "2002-06-11",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.0
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 6.15
+      }
+    ],
+    "gpa": 7.58
+  },
+  {
+    "student_code": "SV0000087",
+    "full_name": "Lê Hải Trang",
+    "date_of_birth": "2004-05-15",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 5.88
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.51
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.67
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.12
+      }
+    ],
+    "gpa": 7.54
+  },
+  {
+    "student_code": "SV0000088",
+    "full_name": "Đặng Hoài Phương",
+    "date_of_birth": "2004-05-05",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.06
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 8.69
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 9.0
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 7.57
+      }
+    ],
+    "gpa": 8.33
+  },
+  {
+    "student_code": "SV0000089",
+    "full_name": "Phạm Hải Khánh",
+    "date_of_birth": "2005-01-31",
+    "program": "An toàn thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.1
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 7.11
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.15
+      }
+    ],
+    "gpa": 6.79
+  },
+  {
+    "student_code": "SV0000090",
+    "full_name": "Đặng Ngọc Chi",
+    "date_of_birth": "2006-07-03",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 6.08
+      }
+    ],
+    "gpa": 6.08
+  },
+  {
+    "student_code": "SV0000091",
+    "full_name": "Phạm Hải Bình",
+    "date_of_birth": "2002-04-24",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.73
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.91
+      }
+    ],
+    "gpa": 8.82
+  },
+  {
+    "student_code": "SV0000092",
+    "full_name": "Vũ Minh Nam",
+    "date_of_birth": "2001-09-29",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 6.18
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 6.55
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 5.02
+      }
+    ],
+    "gpa": 5.92
+  },
+  {
+    "student_code": "SV0000093",
+    "full_name": "Bùi Thanh Trang",
+    "date_of_birth": "2003-02-21",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.13
+      }
+    ],
+    "gpa": 9.13
+  },
+  {
+    "student_code": "SV0000094",
+    "full_name": "Bùi Ngọc Bình",
+    "date_of_birth": "2002-09-04",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 6.73
+      }
+    ],
+    "gpa": 6.73
+  },
+  {
+    "student_code": "SV0000095",
+    "full_name": "Bùi Ngọc An",
+    "date_of_birth": "2001-09-14",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 8.43
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 7.12
+      }
+    ],
+    "gpa": 7.78
+  },
+  {
+    "student_code": "SV0000096",
+    "full_name": "Đặng Thị Khánh",
+    "date_of_birth": "2003-10-14",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 5.91
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 8.2
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 6.28
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 7.73
+      }
+    ],
+    "gpa": 7.03
+  },
+  {
+    "student_code": "SV0000097",
+    "full_name": "Hoàng Hải Bình",
+    "date_of_birth": "2004-06-13",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 8.01
+      }
+    ],
+    "gpa": 8.01
+  },
+  {
+    "student_code": "SV0000098",
+    "full_name": "Hoàng Hoài Trang",
+    "date_of_birth": "2005-10-15",
+    "program": "Công nghệ thông tin",
+    "courses": [
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 5.41
+      },
+      {
+        "course_code": "LTM01",
+        "course_name": "Lập trình mạng",
+        "score": 8.84
+      },
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.32
+      }
+    ],
+    "gpa": 6.86
+  },
+  {
+    "student_code": "SV0000099",
+    "full_name": "Bùi Minh Khánh",
+    "date_of_birth": "2003-05-02",
+    "program": "Khoa học máy tính",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 7.64
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 6.45
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 8.69
+      },
+      {
+        "course_code": "ATDL01",
+        "course_name": "An toàn dữ liệu",
+        "score": 9.35
+      }
+    ],
+    "gpa": 8.03
+  },
+  {
+    "student_code": "SV0000100",
+    "full_name": "Vũ Thị Khánh",
+    "date_of_birth": "2004-10-14",
+    "program": "Hệ thống thông tin",
+    "courses": [
+      {
+        "course_code": "CSDL01",
+        "course_name": "Cơ sở dữ liệu",
+        "score": 6.23
+      },
+      {
+        "course_code": "MMH01",
+        "course_name": "Mật mã học",
+        "score": 9.59
+      },
+      {
+        "course_code": "CTDL01",
+        "course_name": "Cấu trúc dữ liệu",
+        "score": 8.0
+      }
+    ],
+    "gpa": 7.94
+  }
+]

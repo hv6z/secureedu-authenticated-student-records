@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Xác minh dữ liệu | Hồ sơ sinh viên{% endblock %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <span class="eyebrow">Ba lớp kiểm tra</span>
+    <h1>Xác minh tính toàn vẹn</h1>
+    <p>Kiểm tra xác thực AES-GCM, giá trị băm gói mã hóa và liên kết giữa các khối.</p>
+  </div>
+</header>
+
+<div class="content-grid verification-layout">
+  <section class="panel verification-form-panel">
+    <div class="panel-heading"><div><span class="eyebrow">Phạm vi kiểm tra</span><h2>Chọn dữ liệu cần xác minh</h2></div></div>
+    <form method="post" class="verification-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label class="field"><span>Hồ sơ sinh viên</span>
+        <select name="record_id">
+          <option value="">Toàn bộ cơ sở dữ liệu</option>
+          {% for student in students %}
+            <option value="{{ student._record_id }}" {{ 'selected' if selected_record_id == student._record_id else '' }}>{{ student.student_code }} · {{ student.full_name }}{{ ' · đã xóa' if student._status == 'deleted' else '' }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <div class="check-list" aria-label="Các lớp được kiểm tra">
+        <div><span class="check-number">1</span><p><strong>Xác thực gói mã hóa</strong><small>Phát hiện bản mã hoặc dữ liệu liên kết bị thay đổi.</small></p></div>
+        <div><span class="check-number">2</span><p><strong>Đối chiếu giá trị băm</strong><small>So sánh gói lưu trữ với dấu vết trong khối.</small></p></div>
+        <div><span class="check-number">3</span><p><strong>Kiểm tra liên kết chuỗi</strong><small>Tính lại từng khối và kiểm tra thứ tự.</small></p></div>
+      </div>
+      <button class="button button-primary button-full" type="submit">Bắt đầu xác minh</button>
+    </form>
+  </section>
+
+  <section class="panel verification-result-panel">
+    {% if report %}
+      <div class="result-hero {{ 'result-valid' if report.valid else 'result-invalid' }}">
+        <span class="result-icon" aria-hidden="true">{{ '✓' if report.valid else '!' }}</span>
+        <span class="eyebrow">Kết quả kiểm tra</span>
+        <h2>{{ 'Dữ liệu toàn vẹn' if report.valid else 'Phát hiện dữ liệu bất thường' }}</h2>
+        <p>{{ 'Không phát hiện sai lệch trong phạm vi đã chọn.' if report.valid else 'Hệ thống phát hiện một hoặc nhiều sai lệch cần xem xét.' }}</p>
+      </div>
+      <dl class="result-metrics">
+        <div><dt>Khối đã kiểm tra</dt><dd>{{ report.checked_blocks }}</dd></div>
+        <div><dt>Phiên bản đã kiểm tra</dt><dd>{{ report.checked_versions }}</dd></div>
+      </dl>
+      {% if report.messages %}
+        <div class="issue-list"><h3>Chi tiết bất thường</h3><ul>{% for message in report.messages %}<li>{{ message }}</li>{% endfor %}</ul></div>
+      {% else %}
+        <div class="success-note"><span aria-hidden="true">✓</span><p><strong>Không có cảnh báo</strong><small>Các phép kiểm tra đã hoàn tất thành công.</small></p></div>
+      {% endif %}
+    {% else %}
+      <div class="empty-result">
+        <div class="radar" aria-hidden="true"><span></span></div>
+        <h2>Sẵn sàng xác minh</h2>
+        <p>Chọn phạm vi bên trái rồi bắt đầu kiểm tra. Kết quả chi tiết sẽ xuất hiện tại đây.</p>
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

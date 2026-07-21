@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Danh sách sinh viên | Hồ sơ sinh viên{% endblock %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <span class="eyebrow">Quản lý hồ sơ</span>
+    <h1>Danh sách sinh viên</h1>
+    <p>Dữ liệu trong bảng được giải mã trong phiên làm việc hiện tại.</p>
+  </div>
+  {% if can_manage_records() %}
+    <a class="button button-primary" href="{{ url_for('web.new_student') }}">Thêm sinh viên</a>
+  {% endif %}
+</header>
+
+<section class="panel table-panel">
+  {% if students %}
+    <div class="table-toolbar">
+      <label class="search-box">
+        <span class="sr-only">Tìm sinh viên</span>
+        <span aria-hidden="true">⌕</span>
+        <input type="search" data-table-search placeholder="Tìm theo mã, tên hoặc chương trình">
+      </label>
+      <span class="result-count"><strong>{{ students|length }}</strong> hồ sơ</span>
+    </div>
+    <div class="table-scroll">
+      <table class="data-table" data-search-table>
+        <thead><tr><th>Sinh viên</th><th>Mã sinh viên</th><th>Chương trình</th><th>Điểm trung bình</th><th>Phiên bản</th><th><span class="sr-only">Thao tác</span></th></tr></thead>
+        <tbody>
+          {% for student in students %}
+            <tr>
+              <td><div class="person-cell"><span class="avatar small">{{ student.full_name[:1] }}</span><strong>{{ student.full_name }}</strong></div></td>
+              <td><code class="plain-code">{{ student.student_code }}</code></td>
+              <td>{{ student.program }}</td>
+              <td><span class="score-pill">{{ student.gpa }}</span></td>
+              <td><span class="version-badge">v{{ student._version }}</span></td>
+              <td class="actions-cell"><a class="icon-link" href="{{ url_for('web.student_detail', record_id=student._record_id) }}" aria-label="Xem {{ student.full_name }}">Xem <span aria-hidden="true">›</span></a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="no-search-results" hidden>Không có hồ sơ phù hợp với từ khóa.</p>
+  {% else %}
+    <div class="empty-state">
+      <span class="empty-icon" aria-hidden="true">SV</span>
+      <h2>Chưa có hồ sơ sinh viên</h2>
+      <p>Hồ sơ đầu tiên sẽ được mã hóa trước khi lưu và tạo một khối kiểm toán mới.</p>
+      {% if can_manage_records() %}
+        <a class="button button-primary" href="{{ url_for('web.new_student') }}">Tạo hồ sơ đầu tiên</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

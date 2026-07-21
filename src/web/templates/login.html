@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Đăng nhập | Hồ sơ sinh viên{% endblock %}
+{% block content %}
+<section class="login-shell">
+  <div class="login-intro">
+    <span class="eyebrow">Kiểm soát truy cập</span>
+    <h1>Đăng nhập để quản lý hồ sơ an toàn</h1>
+    <p>Mỗi phiên được ký bằng khóa Flask, bảo vệ bằng CSRF token và tự hết hạn theo cấu hình hệ thống.</p>
+    <div class="login-feature-list">
+      <div><span aria-hidden="true">01</span><p><strong>Quản trị viên</strong><small>Quản lý chức năng và tài khoản bằng công cụ dòng lệnh.</small></p></div>
+      <div><span aria-hidden="true">02</span><p><strong>Cán bộ học vụ</strong><small>Thêm, cập nhật, xóa logic và xác minh hồ sơ.</small></p></div>
+      <div><span aria-hidden="true">03</span><p><strong>Kiểm toán viên</strong><small>Chỉ đọc hồ sơ, xem chuỗi và chạy xác minh.</small></p></div>
+    </div>
+  </div>
+
+  <form class="panel login-card" method="post" action="{{ url_for('auth.login') }}" autocomplete="on">
+    <input type="hidden" name="csrf_token" value="{{ login_csrf_token() }}">
+    <input type="hidden" name="next" value="{{ next_url }}">
+    <div class="login-card-heading">
+      <span class="login-lock" aria-hidden="true">↳</span>
+      <div><span class="eyebrow">Phiên bảo mật</span><h2>Thông tin đăng nhập</h2></div>
+    </div>
+    <label class="field">
+      <span>Tên đăng nhập</span>
+      <input name="username" value="{{ username|default('') }}" required minlength="3" maxlength="64" autocomplete="username" autofocus>
+    </label>
+    <label class="field">
+      <span>Mật khẩu</span>
+      <input type="password" name="password" required maxlength="256" autocomplete="current-password">
+    </label>
+    <button class="button button-primary button-full" type="submit">Đăng nhập</button>
+    <p class="login-help">Nếu chưa có tài khoản, chạy <code>python scripts/manage_user.py create</code> trên máy chủ.</p>
+  </form>
+</section>
+{% endblock %}
