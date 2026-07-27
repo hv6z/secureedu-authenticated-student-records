@@ -64,3 +64,40 @@ def test_settings_reject_invalid_session_configuration(monkeypatch) -> None:
     with pytest.raises(ConfigurationError, match="LOGIN_MAX_ATTEMPTS"):
         Settings.from_env(testing=True)
 
+
+def test_load_env_file_ignores_missing_file(tmp_path) -> None:
+    load_env_file(tmp_path / "missing.env")
+
+
+@pytest.mark.parametrize("value", ["abc", "0"])
+def test_settings_reject_non_positive_or_non_integer_timeout(
+    monkeypatch, value
+) -> None:
+    monkeypatch.setenv("AES_KEY", base64.b64encode(b"z" * 32).decode("ascii"))
+    monkeypatch.setenv("FLASK_SECRET_KEY", "test-secret")
+    monkeypatch.setenv("SESSION_LIFETIME_MINUTES", value)
+
+    with pytest.raises(ConfigurationError, match="SESSION_LIFETIME_MINUTES"):
+        Settings.from_env(testing=True)
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [("false", False), ("0", False), ("yes", True), ("off", False)],
+)
+def test_settings_parses_cookie_security_boolean(monkeypatch, value, expected) -> None:
+    monkeypatch.setenv("AES_KEY", base64.b64encode(b"z" * 32).decode("ascii"))
+    monkeypatch.setenv("FLASK_SECRET_KEY", "test-secret")
+    monkeypatch.setenv("SESSION_COOKIE_SECURE", value)
+
+    assert Settings.from_env(testing=True).session_cookie_secure is expected
+
+
+def test_settings_rejects_invalid_cookie_security_boolean(monkeypatch) -> None:
+    monkeypatch.setenv("AES_KEY", base64.b64encode(b"z" * 32).decode("ascii"))
+    monkeypatch.setenv("FLASK_SECRET_KEY", "test-secret")
+    monkeypatch.setenv("SESSION_COOKIE_SECURE", "sometimes")
+
+    with pytest.raises(ConfigurationError, match="SESSION_COOKIE_SECURE"):
+        Settings.from_env(testing=True)
+

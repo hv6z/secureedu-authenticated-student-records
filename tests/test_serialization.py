@@ -60,6 +60,37 @@ def test_make_aad_binds_all_context_fields() -> None:
     )
 
 
+@pytest.mark.parametrize(
+    "arguments,error_type",
+    [
+        ({"record_id": True}, TypeError),
+        ({"record_id": 0}, ValueError),
+        ({"record_id": "  "}, ValueError),
+        ({"version": True}, TypeError),
+        ({"version": 0}, ValueError),
+        ({"operation": 123}, TypeError),
+        ({"operation": "  "}, ValueError),
+        ({"schema_version": True}, TypeError),
+        ({"schema_version": 0}, ValueError),
+        ({"actor_id": "  "}, ValueError),
+        ({"actor_role": "  "}, ValueError),
+    ],
+)
+def test_make_aad_rejects_invalid_context(arguments, error_type) -> None:
+    values = {
+        "record_id": "record-01",
+        "version": 1,
+        "operation": "CREATE",
+        "schema_version": 2,
+        "actor_id": "user-01",
+        "actor_role": "registrar",
+    }
+    values.update(arguments)
+
+    with pytest.raises(error_type):
+        make_aad(**values)
+
+
 def test_envelope_hash_covers_context_and_all_envelope_metadata() -> None:
     envelope = EncryptedEnvelope(
         schema_version=2,

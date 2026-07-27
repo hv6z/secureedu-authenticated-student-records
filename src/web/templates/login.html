@@ -1,35 +1,37 @@
 {% extends "base.html" %}
-{% block title %}Đăng nhập | Hồ sơ sinh viên{% endblock %}
+{% from "_icons.html" import icon %}
+{% block title %}Đăng nhập | SecureEdu Blockchain{% endblock %}
 {% block content %}
 <section class="login-shell">
   <div class="login-intro">
-    <span class="eyebrow">Kiểm soát truy cập</span>
-    <h1>Đăng nhập để quản lý hồ sơ an toàn</h1>
-    <p>Mỗi phiên được ký bằng khóa Flask, bảo vệ bằng CSRF token và tự hết hạn theo cấu hình hệ thống.</p>
+    <span class="eyebrow"><span class="live-dot"></span> Secure student records</span>
+    <h1>Bảo vệ dữ liệu học vụ từ lúc ghi nhận đến khi kiểm toán.</h1>
+    <p>SecureEdu kết hợp mã hóa xác thực, phân quyền theo vai trò và chuỗi liên kết băm để mọi thay đổi đều có thể kiểm chứng.</p>
     <div class="login-feature-list">
-      <div><span aria-hidden="true">01</span><p><strong>Quản trị viên</strong><small>Quản lý chức năng và tài khoản bằng công cụ dòng lệnh.</small></p></div>
-      <div><span aria-hidden="true">02</span><p><strong>Cán bộ học vụ</strong><small>Thêm, cập nhật, xóa logic và xác minh hồ sơ.</small></p></div>
-      <div><span aria-hidden="true">03</span><p><strong>Kiểm toán viên</strong><small>Chỉ đọc hồ sơ, xem chuỗi và chạy xác minh.</small></p></div>
+      <div><span class="feature-icon">{{ icon('lock', 21) }}</span><p><strong>AES-256-GCM</strong><small>Bảo mật nội dung và phát hiện chỉnh sửa bản mã.</small></p></div>
+      <div><span class="feature-icon">{{ icon('users', 21) }}</span><p><strong>Kiểm soát RBAC</strong><small>Phân quyền quản trị, học vụ và kiểm toán rõ ràng.</small></p></div>
+      <div><span class="feature-icon">{{ icon('blocks', 21) }}</span><p><strong>Blockchain audit</strong><small>Liên kết dấu vết thay đổi theo từng phiên bản hồ sơ.</small></p></div>
     </div>
+    <div class="login-proof">{{ icon('shield', 18) }} <span>Phiên đăng nhập được ký, giới hạn thời gian và bảo vệ CSRF.</span></div>
   </div>
 
-  <form class="panel login-card" method="post" action="{{ url_for('auth.login') }}" autocomplete="on">
+  <form class="panel login-card" method="post" action="{{ url_for('auth.login') }}" autocomplete="on" data-loading-form>
     <input type="hidden" name="csrf_token" value="{{ login_csrf_token() }}">
     <input type="hidden" name="next" value="{{ next_url }}">
     <div class="login-card-heading">
-      <span class="login-lock" aria-hidden="true">↳</span>
-      <div><span class="eyebrow">Phiên bảo mật</span><h2>Thông tin đăng nhập</h2></div>
+      <span class="login-lock">{{ icon('key', 24) }}</span>
+      <div><span class="eyebrow">Cổng truy cập bảo mật</span><h2>Đăng nhập hệ thống</h2><p>Nhập thông tin tài khoản đã được cấp.</p></div>
     </div>
     <label class="field">
       <span>Tên đăng nhập</span>
-      <input name="username" value="{{ username|default('') }}" required minlength="3" maxlength="64" autocomplete="username" autofocus>
+      <span class="input-with-icon">{{ icon('users', 18) }}<input name="username" value="{{ username|default('') }}" required minlength="3" maxlength="64" autocomplete="username" autofocus placeholder="Ví dụ: admin"></span>
     </label>
     <label class="field">
       <span>Mật khẩu</span>
-      <input type="password" name="password" required maxlength="256" autocomplete="current-password">
+      <span class="input-with-icon password-field">{{ icon('lock', 18) }}<input id="login-password" type="password" name="password" required maxlength="256" autocomplete="current-password" placeholder="Nhập mật khẩu"><button type="button" class="password-toggle" aria-controls="login-password" aria-label="Hiện mật khẩu">{{ icon('eye', 18) }}</button></span>
     </label>
-    <button class="button button-primary button-full" type="submit">Đăng nhập</button>
-    <p class="login-help">Nếu chưa có tài khoản, chạy <code>python scripts/manage_user.py create</code> trên máy chủ.</p>
+    <button class="button button-primary button-full" type="submit" data-submit-label="Đang xác thực…">{{ icon('shield') }} <span>Đăng nhập an toàn</span></button>
+    <p class="login-help">Chưa có tài khoản? Quản trị viên tạo tài khoản bằng công cụ <code>manage_user.py</code>.</p>
   </form>
 </section>
 {% endblock %}

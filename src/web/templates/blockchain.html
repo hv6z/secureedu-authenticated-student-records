@@ -1,48 +1,41 @@
 {% extends "base.html" %}
-{% block title %}Chuỗi kiểm toán | Hồ sơ sinh viên{% endblock %}
+{% from "_icons.html" import icon %}
+{% block title %}Blockchain | SecureEdu Blockchain{% endblock %}
 {% block content %}
 <header class="page-header">
-  <div>
-    <span class="eyebrow">Sổ nhật ký liên kết băm</span>
-    <h1>Chuỗi kiểm toán</h1>
-    <p>Mỗi thay đổi hồ sơ tạo một khối liên kết với giá trị băm của khối trước.</p>
-  </div>
-  <a class="button button-secondary" href="{{ url_for('web.verification') }}">Kiểm tra toàn chuỗi</a>
+  <div><span class="eyebrow">Hash-linked audit ledger</span><h1>Chuỗi kiểm toán Blockchain</h1><p>Mỗi thay đổi tạo một khối chứa dấu vết phiên bản và liên kết với giá trị băm của khối trước.</p></div>
+  <a class="button button-secondary" href="{{ url_for('web.verification') }}">{{ icon('verify') }} Kiểm tra toàn chuỗi</a>
 </header>
 
-<div class="notice notice-info">
-  <strong>Chuỗi riêng tư một nút</strong>
-  <span>Đây là sổ nhật ký chống sửa đổi phục vụ nghiên cứu, không phải mạng chuỗi khối phân tán.</span>
-</div>
+<div class="notice notice-info">{{ icon('blocks') }}<div><strong>Mô hình Blockchain riêng tư một nút</strong><span>Sổ kiểm toán liên kết băm phục vụ nghiên cứu; không phải mạng phân tán nhiều nút.</span></div></div>
+
+<section class="chain-summary" aria-label="Tổng quan chuỗi">
+  <div>{{ icon('blocks', 21) }}<span>Tổng số khối</span><strong>{{ blocks|length }}</strong></div>
+  <div>{{ icon('hash', 21) }}<span>Thuật toán băm</span><strong>SHA-256</strong></div>
+  <div>{{ icon('shield', 21) }}<span>Cơ chế dữ liệu</span><strong>Append-only</strong></div>
+</section>
 
 <section class="chain-list" aria-label="Danh sách khối">
   {% for block in blocks|reverse %}
     <article class="block-card {{ 'genesis-card' if block.operation == 'GENESIS' else '' }}">
       <div class="chain-rail" aria-hidden="true"><span></span></div>
-      <div class="block-index"><small>Khối</small><strong>{{ block.block_index }}</strong></div>
+      <div class="block-index"><small>BLOCK</small><strong>#{{ block.block_index }}</strong></div>
       <div class="block-content">
-        <div class="block-topline">
-          <span class="operation operation-{{ block.operation|lower }}">{{ operation_label(block.operation) }}</span>
-          <time>{{ block.timestamp[:19].replace('T', ' ') }} UTC</time>
-        </div>
+        <div class="block-topline"><span class="operation operation-{{ block.operation|lower }}">{{ operation_label(block.operation) }}</span><time datetime="{{ block.timestamp }}">{{ block.timestamp[:19].replace('T', ' ') }} UTC</time></div>
         {% if block.operation != 'GENESIS' %}
           <div class="block-facts">
             <div><span>Mã hồ sơ</span><a href="{{ url_for('web.student_detail', record_id=block.record_id) }}"><code>{{ block.record_id }}</code></a></div>
             <div><span>Phiên bản</span><strong>v{{ block.version }}</strong></div>
             <div><span>Người thao tác</span><strong>{{ role_label(block.actor_role) }}</strong><code title="{{ block.actor_id }}">{{ block.actor_id[:13] }}{{ '…' if block.actor_id|length > 13 else '' }}</code></div>
           </div>
-        {% else %}
-          <p class="genesis-copy">Khối cố định mở đầu chuỗi và tạo mốc kiểm tra cho khối tiếp theo.</p>
-        {% endif %}
+        {% else %}<p class="genesis-copy">Khối cố định mở đầu chuỗi và tạo mốc kiểm tra cho khối tiếp theo.</p>{% endif %}
         <div class="hash-grid">
-          <div><span>Giá trị băm khối trước</span><code title="{{ block.previous_hash }}">{{ block.previous_hash }}</code></div>
-          <div><span>Giá trị băm gói mã hóa</span><code title="{{ block.envelope_hash }}">{{ block.envelope_hash }}</code></div>
-          <div class="current-hash"><span>Giá trị băm khối hiện tại</span><code title="{{ block.block_hash }}">{{ block.block_hash }}</code></div>
+          <div><span>Previous hash</span><code title="{{ block.previous_hash }}">{{ block.previous_hash }}</code></div>
+          <div><span>Envelope hash</span><code title="{{ block.envelope_hash }}">{{ block.envelope_hash }}</code></div>
+          <div class="current-hash"><span>Current block hash</span><code title="{{ block.block_hash }}">{{ block.block_hash }}</code></div>
         </div>
       </div>
     </article>
-  {% else %}
-    <div class="empty-state panel"><h2>Chuỗi chưa được khởi tạo</h2><p>Hãy khởi tạo cơ sở dữ liệu trước khi sử dụng.</p></div>
-  {% endfor %}
+  {% else %}<div class="empty-state panel"><span class="empty-icon">{{ icon('blocks', 30) }}</span><h2>Chuỗi chưa được khởi tạo</h2><p>Hãy khởi tạo cơ sở dữ liệu trước khi sử dụng.</p></div>{% endfor %}
 </section>
 {% endblock %}

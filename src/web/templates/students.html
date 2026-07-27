@@ -1,14 +1,15 @@
 {% extends "base.html" %}
-{% block title %}Danh sách sinh viên | Hồ sơ sinh viên{% endblock %}
+{% from "_icons.html" import icon %}
+{% block title %}Hồ sơ sinh viên | SecureEdu Blockchain{% endblock %}
 {% block content %}
 <header class="page-header">
   <div>
-    <span class="eyebrow">Quản lý hồ sơ</span>
-    <h1>Danh sách sinh viên</h1>
-    <p>Dữ liệu trong bảng được giải mã trong phiên làm việc hiện tại.</p>
+    <span class="eyebrow">Kho dữ liệu đã mã hóa</span>
+    <h1>Hồ sơ sinh viên</h1>
+    <p>Dữ liệu rõ chỉ xuất hiện trong phiên đã xác thực; dữ liệu lưu trữ được bảo vệ bằng AES-GCM.</p>
   </div>
   {% if can_manage_records() %}
-    <a class="button button-primary" href="{{ url_for('web.new_student') }}">Thêm sinh viên</a>
+    <a class="button button-primary" href="{{ url_for('web.new_student') }}">{{ icon('plus') }} Thêm hồ sơ</a>
   {% endif %}
 </header>
 
@@ -16,15 +17,15 @@
   {% if students %}
     <div class="table-toolbar">
       <label class="search-box">
-        <span class="sr-only">Tìm sinh viên</span>
-        <span aria-hidden="true">⌕</span>
-        <input type="search" data-table-search placeholder="Tìm theo mã, tên hoặc chương trình">
+        <span class="sr-only">Tìm hồ sơ sinh viên</span>
+        {{ icon('search', 19) }}
+        <input type="search" data-table-search placeholder="Tìm theo mã, tên hoặc chương trình" autocomplete="off">
       </label>
-      <span class="result-count"><strong>{{ students|length }}</strong> hồ sơ</span>
+      <span class="result-count" aria-live="polite"><strong data-result-count>{{ students|length }}</strong> hồ sơ</span>
     </div>
-    <div class="table-scroll">
+    <div class="table-scroll" tabindex="0" aria-label="Bảng hồ sơ sinh viên có thể cuộn ngang trên màn hình nhỏ">
       <table class="data-table" data-search-table>
-        <thead><tr><th>Sinh viên</th><th>Mã sinh viên</th><th>Chương trình</th><th>Điểm trung bình</th><th>Phiên bản</th><th><span class="sr-only">Thao tác</span></th></tr></thead>
+        <thead><tr><th>Sinh viên</th><th>Mã sinh viên</th><th>Chương trình</th><th>Điểm TB</th><th>Phiên bản</th><th><span class="sr-only">Thao tác</span></th></tr></thead>
         <tbody>
           {% for student in students %}
             <tr>
@@ -33,7 +34,7 @@
               <td>{{ student.program }}</td>
               <td><span class="score-pill">{{ student.gpa }}</span></td>
               <td><span class="version-badge">v{{ student._version }}</span></td>
-              <td class="actions-cell"><a class="icon-link" href="{{ url_for('web.student_detail', record_id=student._record_id) }}" aria-label="Xem {{ student.full_name }}">Xem <span aria-hidden="true">›</span></a></td>
+              <td class="actions-cell"><a class="icon-link" href="{{ url_for('web.student_detail', record_id=student._record_id) }}" aria-label="Xem hồ sơ {{ student.full_name }}">Chi tiết {{ icon('arrow-right', 16) }}</a></td>
             </tr>
           {% endfor %}
         </tbody>
@@ -42,12 +43,10 @@
     <p class="no-search-results" hidden>Không có hồ sơ phù hợp với từ khóa.</p>
   {% else %}
     <div class="empty-state">
-      <span class="empty-icon" aria-hidden="true">SV</span>
+      <span class="empty-icon">{{ icon('file', 30) }}</span>
       <h2>Chưa có hồ sơ sinh viên</h2>
       <p>Hồ sơ đầu tiên sẽ được mã hóa trước khi lưu và tạo một khối kiểm toán mới.</p>
-      {% if can_manage_records() %}
-        <a class="button button-primary" href="{{ url_for('web.new_student') }}">Tạo hồ sơ đầu tiên</a>
-      {% endif %}
+      {% if can_manage_records() %}<a class="button button-primary" href="{{ url_for('web.new_student') }}">{{ icon('plus') }} Tạo hồ sơ đầu tiên</a>{% endif %}
     </div>
   {% endif %}
 </section>

@@ -2,7 +2,7 @@
 
 ## trạng thái tài liệu
 
-Tệp này đã được đối chiếu với mã nguồn, 79 kiểm thử tự động và bộ kết quả thực nghiệm ngày 12/07/2026. Các trường tác giả, đơn vị công tác và thông số phần cứng của máy đã chạy phép đo vẫn phải được người thực hiện xác nhận trước khi đưa vào mẫu FAIR 2026.
+Tệp này đã được đối chiếu với mã nguồn, 113 kiểm thử tự động, độ bao phủ 91% và bộ kết quả thực nghiệm ngày 12/07/2026. Các trường tác giả, đơn vị công tác và thông số phần cứng của máy đã chạy phép đo vẫn phải được người thực hiện xác nhận trước khi đưa vào mẫu FAIR 2026.
 
 Bộ số liệu 30 lần lặp được tạo trước đợt bổ sung đăng nhập/RBAC và actor schema v2 ngày 20/07/2026. Chức năng mới đã qua kiểm thử và chạy benchmark nhanh, nhưng phải chạy lại bộ 30 lần lặp trước khi dùng số hiệu năng như kết quả cuối của phiên bản hiện tại.
 
@@ -10,7 +10,7 @@ Không đưa tệp này vào mẫu FAIR 2026 trước khi nhận lại mẫu bá
 
 ## tiêu đề đề xuất
 
-Quản lý hồ sơ sinh viên có kiểm chứng bằng mã hóa xác thực và sổ nhật ký liên kết băm
+Bảo mật hồ sơ sinh viên với AES-GCM và Blockchain
 
 ## tóm tắt
 
@@ -162,7 +162,18 @@ Cách này che mã sinh viên khỏi người chỉ đọc SQLite. Nó vẫn là
 | `src/services` | giao dịch nghiệp vụ thống nhất |
 | `src/web` | giao diện quản lý và xác minh |
 
-Phần này cần bổ sung ảnh thật của bảng điều khiển, danh sách hồ sơ, chi tiết hồ sơ, chuỗi khối và kết quả phát hiện thay đổi.
+Giao diện được thiết kế theo hướng dashboard bảo mật doanh nghiệp với tên **SecureEdu Blockchain**, sử dụng cùng hệ thống màu, icon SVG và trạng thái trên các trang đăng nhập, tổng quan, hồ sơ, Blockchain và xác minh. Ảnh chụp thực tế ở kích thước desktop và mobile được lưu trong `docs/screenshots/`.
+
+### Kết quả kiểm thử kỹ thuật
+
+| chỉ tiêu | kết quả ngày 27/07/2026 |
+|---|---|
+| kiểm thử tự động | 113/113 đạt |
+| độ bao phủ mã nguồn | 91% tổng thể |
+| ngưỡng coverage bắt buộc | tối thiểu 90% |
+| kiểm tra phụ thuộc | không có phụ thuộc hỏng |
+| kiểm tra giao diện Chrome | đạt ở 375 px và 1440 px; không tràn ngang |
+| accessibility chính | skip link, focus-visible, label biểu mẫu, reduced-motion, icon SVG |
 
 ## VI. thiết lập thực nghiệm
 

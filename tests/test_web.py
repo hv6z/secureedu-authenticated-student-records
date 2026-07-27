@@ -101,7 +101,7 @@ def _student_form(csrf_token: str | None = None) -> dict:
 def test_main_pages_are_available(client, path) -> None:
     response = client.get(path)
     assert response.status_code == 200
-    assert "Hồ sơ sinh viên".encode("utf-8") in response.data
+    assert b"SecureEdu Blockchain" in response.data
 
 
 def test_anonymous_user_is_redirected_to_login(anonymous_client) -> None:

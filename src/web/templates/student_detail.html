@@ -1,39 +1,34 @@
 {% extends "base.html" %}
-{% block title %}{{ student.full_name }} | Hồ sơ sinh viên{% endblock %}
+{% from "_icons.html" import icon %}
+{% block title %}{{ student.full_name }} | SecureEdu Blockchain{% endblock %}
 {% block content %}
+<a class="back-link" href="{{ url_for('web.students') }}">{{ icon('arrow-left', 17) }} Danh sách hồ sơ</a>
 <header class="page-header detail-header">
-  <div>
-    <a class="back-link" href="{{ url_for('web.students') }}">← Danh sách sinh viên</a>
-    <div class="title-with-avatar">
-      <span class="avatar large" aria-hidden="true">{{ student.full_name[:1] }}</span>
-      <div>
-        <span class="eyebrow">{{ student.student_code }}</span>
-        <h1>{{ student.full_name }}</h1>
-        <p>{{ student.program }}</p>
-      </div>
-    </div>
+  <div class="title-with-avatar">
+    <span class="avatar large" aria-hidden="true">{{ student.full_name[:1] }}</span>
+    <div><span class="eyebrow">{{ student.student_code }}</span><h1>{{ student.full_name }}</h1><p>{{ student.program }}</p></div>
   </div>
   {% if student._status == 'active' and can_manage_records() %}
     <div class="header-actions">
-      <a class="button button-secondary" href="{{ url_for('web.edit_student', record_id=student._record_id) }}">Cập nhật</a>
+      <a class="button button-secondary" href="{{ url_for('web.edit_student', record_id=student._record_id) }}">{{ icon('edit') }} Cập nhật</a>
       <form method="post" action="{{ url_for('web.delete_student', record_id=student._record_id) }}" data-confirm="Bạn có chắc muốn xóa hồ sơ này? Thao tác xóa vẫn được ghi trong chuỗi kiểm toán.">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="expected_version" value="{{ student._version }}">
-        <button class="button button-danger" type="submit">Xóa hồ sơ</button>
+        <button class="button button-danger" type="submit">{{ icon('trash') }} Xóa hồ sơ</button>
       </form>
     </div>
   {% endif %}
 </header>
 
 {% if student._status == 'deleted' %}
-  <div class="notice notice-warning"><strong>Hồ sơ đã được xóa logic.</strong><span>Bản mã và lịch sử vẫn được giữ lại để phục vụ kiểm toán.</span></div>
+  <div class="notice notice-warning">{{ icon('alert') }}<div><strong>Hồ sơ đã được xóa logic</strong><span>Bản mã và lịch sử vẫn được giữ lại để phục vụ kiểm toán.</span></div></div>
 {% endif %}
 
 <div class="content-grid detail-grid">
   <section class="panel">
-    <div class="panel-heading"><div><span class="eyebrow">Thông tin đã giải mã</span><h2>Thông tin sinh viên</h2></div><span class="status-badge {{ 'status-active' if student._status == 'active' else 'status-deleted' }}">{{ 'Đang hoạt động' if student._status == 'active' else 'Đã xóa' }}</span></div>
+    <div class="panel-heading"><div><span class="eyebrow">Thông tin đã giải mã</span><h2>Thông tin sinh viên</h2></div><span class="status-badge {{ 'status-active' if student._status == 'active' else 'status-deleted' }}">{{ icon('check' if student._status == 'active' else 'alert', 14) }} {{ 'Đang hoạt động' if student._status == 'active' else 'Đã xóa' }}</span></div>
     <dl class="detail-list">
-      <div><dt>Mã sinh viên</dt><dd>{{ student.student_code }}</dd></div>
+      <div><dt>Mã sinh viên</dt><dd><code class="plain-code">{{ student.student_code }}</code></dd></div>
       <div><dt>Họ và tên</dt><dd>{{ student.full_name }}</dd></div>
       <div><dt>Ngày sinh</dt><dd>{{ student.date_of_birth }}</dd></div>
       <div><dt>Chương trình học</dt><dd>{{ student.program }}</dd></div>
@@ -42,28 +37,21 @@
   </section>
 
   <aside class="panel verification-card {{ 'verification-valid' if report.valid else 'verification-invalid' }}">
-    <span class="verification-icon" aria-hidden="true">{{ '✓' if report.valid else '!' }}</span>
+    <span class="verification-icon">{{ icon('shield' if report.valid else 'alert', 30) }}</span>
     <span class="eyebrow">Kết quả xác minh</span>
     <h2>{{ 'Dữ liệu toàn vẹn' if report.valid else 'Dữ liệu có bất thường' }}</h2>
     <p>{{ 'Các phiên bản mã hóa và khối liên quan đều hợp lệ.' if report.valid else 'Một hoặc nhiều phép kiểm tra không thành công.' }}</p>
-    <dl class="mini-metrics">
-      <div><dt>Khối</dt><dd>{{ report.checked_blocks }}</dd></div>
-      <div><dt>Phiên bản</dt><dd>{{ report.checked_versions }}</dd></div>
-    </dl>
-    <a class="text-link" href="{{ url_for('web.verification') }}">Xem công cụ xác minh <span aria-hidden="true">→</span></a>
+    <dl class="mini-metrics"><div><dt>Khối</dt><dd>{{ report.checked_blocks }}</dd></div><div><dt>Phiên bản</dt><dd>{{ report.checked_versions }}</dd></div></dl>
+    <a class="text-link" href="{{ url_for('web.verification') }}">Mở công cụ xác minh {{ icon('arrow-right', 16) }}</a>
   </aside>
 </div>
 
 <section class="panel table-panel">
   <div class="panel-heading"><div><span class="eyebrow">Kết quả học tập</span><h2>Danh sách học phần</h2></div><span class="result-count"><strong>{{ student.courses|length }}</strong> học phần</span></div>
-  <div class="table-scroll">
+  <div class="table-scroll" tabindex="0">
     <table class="data-table course-table">
       <thead><tr><th>STT</th><th>Mã học phần</th><th>Tên học phần</th><th>Điểm</th></tr></thead>
-      <tbody>
-        {% for course in student.courses %}
-          <tr><td>{{ loop.index }}</td><td><code class="plain-code">{{ course.course_code }}</code></td><td>{{ course.get('course_name', 'Chưa cung cấp') }}</td><td><span class="score-pill">{{ course.score }}</span></td></tr>
-        {% endfor %}
-      </tbody>
+      <tbody>{% for course in student.courses %}<tr><td>{{ loop.index }}</td><td><code class="plain-code">{{ course.course_code }}</code></td><td>{{ course.get('course_name', 'Chưa cung cấp') }}</td><td><span class="score-pill">{{ course.score }}</span></td></tr>{% endfor %}</tbody>
     </table>
   </div>
 </section>

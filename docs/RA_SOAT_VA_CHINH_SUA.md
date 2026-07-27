@@ -1,6 +1,6 @@
 # Rà soát đề tài và danh sách hoàn thiện
 
-Ngày rà soát gần nhất: **20/07/2026**.
+Ngày rà soát gần nhất: **27/07/2026**.
 
 ## Kết luận ngắn
 
@@ -33,15 +33,17 @@ Hệ thống **chưa đạt mức triển khai với dữ liệu thật** vì ch
 | Cài `requirements-lock.txt` trong môi trường mới | Đạt |
 | `pip check` | Không có phụ thuộc hỏng |
 | Biên dịch toàn bộ tệp Python | Đạt |
-| Kiểm thử tự động | 79/79 đạt |
-| Độ bao phủ | 88% tổng thể |
+| Kiểm thử tự động | 113/113 đạt |
+| Độ bao phủ | 91% tổng thể; đạt yêu cầu tối thiểu 90% |
 | Thực nghiệm nhanh, 100 hồ sơ, 3 cấu hình | Đạt; xuất CSV + JSON metadata |
 | Tamper test sau nâng cấp, 6 kiểu × 1 lần | 6/6 phát hiện |
 | Tương thích database schema v1 | Đạt; dữ liệu cũ vẫn giải mã và xác minh được |
 | Bộ kết quả báo cáo có sẵn | 3 quy mô × 3 cấu hình × 30 lần lặp |
 | Bộ thử can thiệp có sẵn | 6 kiểu × 30 lần = 180 lần |
+| Giao diện web | Đã thiết kế lại toàn bộ, responsive 375–1440 px, kiểm tra Chrome không tràn ngang |
+| Accessibility UI | Có skip link, focus-visible, label biểu mẫu, icon SVG, touch target và reduced-motion |
 
-Lần chạy pytest đầu tiên gặp lỗi quyền truy cập thư mục tạm mặc định của Windows. Đây là lỗi môi trường; chạy với `--basetemp` trong workspace cho kết quả đầy đủ đạt.
+Lần chạy pytest đầu tiên gặp lỗi quyền truy cập thư mục tạm mặc định của Windows. Đây là lỗi môi trường; `pytest.ini` hiện cố định `--basetemp=.pytest-tmp`, đo coverage và chặn kết quả dưới 90%.
 
 ## Điểm phù hợp với tài liệu gốc
 
@@ -96,6 +98,9 @@ Vì vậy, các cập nhật README/sơ đồ trong workspace **chưa tự xuấ
 6. Bổ sung `users`, trang đăng nhập, session hết hạn, lockout và RBAC.
 7. Bổ sung `scripts/manage_user.py` để tạo, liệt kê, đổi mật khẩu/vai trò và vô hiệu hóa tài khoản.
 8. Nâng schema mật mã/block lên v2 để bảo vệ `actor_id`/role, kèm migration v1.
+9. Bổ sung kiểm thử nhánh bảo mật và đặt ngưỡng coverage bắt buộc 90%; kết quả hiện tại 113/113 test, 91%.
+10. Thiết kế lại toàn bộ giao diện thành **SecureEdu Blockchain** theo design system enterprise, dùng icon SVG và responsive.
+11. Kiểm tra thực tế bằng Chrome ở 1440 px và 375 px; không có tràn ngang, menu mobile và luồng đăng nhập hoạt động.
 
 ## Checklist trước khi nộp báo cáo
 
@@ -103,7 +108,7 @@ Vì vậy, các cập nhật README/sơ đồ trong workspace **chưa tự xuấ
 - [ ] Xác nhận CPU, RAM và hệ điều hành của đúng máy tạo bộ số liệu ngày 12/07/2026.
 - [ ] Đối chiếu từng tài liệu tham khảo với nguồn gốc; kiểm tra DOI, năm, trang và trùng lặp.
 - [ ] Đưa nội dung vào đúng mẫu FAIR 2026 và kiểm tra giới hạn trang.
-- [ ] Bổ sung ảnh giao diện thật với dữ liệu mô phỏng.
+- [x] Bổ sung ảnh giao diện thật với dữ liệu mô phỏng trong `docs/screenshots/`.
 - [ ] Ghi rõ các phép `verify` của ba cấu hình không tương đương về chức năng.
 - [ ] Dùng thuật ngữ “sổ nhật ký kiểm toán liên kết băm một nút” hoặc “private blockchain prototype”.
 - [ ] Đồng bộ đúng phiên bản workspace lên GitHub.

@@ -1,18 +1,14 @@
 {% extends "base.html" %}
-{% block title %}{{ title }} | Hồ sơ sinh viên{% endblock %}
+{% from "_icons.html" import icon %}
+{% block title %}{{ title }} | SecureEdu Blockchain{% endblock %}
 {% block content %}
 <section class="error-page panel">
+  <span class="error-symbol">{{ icon('alert', 34) }}</span>
   <span class="error-code">{{ status_code }}</span>
   <span class="eyebrow">Không thể mở nội dung</span>
-  <h1>{{ title }}</h1>
-  <p>{{ message }}</p>
+  <h1>{{ title }}</h1><p>{{ message }}</p>
   <div class="hero-actions">
-    {% if current_user %}
-      <a class="button button-primary" href="{{ url_for('web.dashboard') }}">Về bảng điều khiển</a>
-      <a class="button button-secondary" href="{{ url_for('web.students') }}">Xem danh sách sinh viên</a>
-    {% else %}
-      <a class="button button-primary" href="{{ url_for('auth.login') }}">Về trang đăng nhập</a>
-    {% endif %}
+    {% if current_user %}<a class="button button-primary" href="{{ url_for('web.dashboard') }}">{{ icon('home') }} Về tổng quan</a><a class="button button-secondary" href="{{ url_for('web.students') }}">{{ icon('users') }} Xem hồ sơ</a>{% else %}<a class="button button-primary" href="{{ url_for('auth.login') }}">{{ icon('key') }} Về trang đăng nhập</a>{% endif %}
   </div>
 </section>
 {% endblock %}

@@ -94,3 +94,62 @@ def test_envelope_is_immutable_and_validates_nonce() -> None:
 
     with pytest.raises(ValueError, match="12 byte"):
         EncryptedEnvelope(1, AES_GCM_ALGORITHM, "key-v1", b"short", b"c" * 16)
+
+
+@pytest.mark.parametrize(
+    "field,value,error_type",
+    [
+        ("schema_version", True, TypeError),
+        ("schema_version", 0, ValueError),
+        ("algorithm", 123, TypeError),
+        ("algorithm", "  ", ValueError),
+        ("key_id", 123, TypeError),
+        ("key_id", "  ", ValueError),
+        ("nonce", "not-bytes", TypeError),
+        ("ciphertext", "not-bytes", TypeError),
+        ("ciphertext", b"too-short", ValueError),
+    ],
+)
+def test_envelope_rejects_invalid_metadata(field, value, error_type) -> None:
+    values = {
+        "schema_version": 2,
+        "algorithm": AES_GCM_ALGORITHM,
+        "key_id": "key-v1",
+        "nonce": b"n" * 12,
+        "ciphertext": b"c" * 16,
+    }
+    values[field] = value
+
+    with pytest.raises(error_type):
+        EncryptedEnvelope(**values)
+
+
+@pytest.mark.parametrize(
+    "key,key_id,error_type",
+    [
+        ("not-bytes", "key-v1", TypeError),
+        (KEY, 123, TypeError),
+        (KEY, "  ", ValueError),
+    ],
+)
+def test_cipher_rejects_invalid_constructor_types(key, key_id, error_type) -> None:
+    with pytest.raises(error_type):
+        AesGcmCipher(key, key_id)
+
+
+def test_cipher_rejects_invalid_payload_and_envelope_metadata() -> None:
+    cipher = AesGcmCipher(KEY, "key-v1")
+    assert cipher.key_id == "key-v1"
+
+    with pytest.raises(TypeError):
+        cipher.encrypt("not-bytes", aad=b"context")
+    with pytest.raises(TypeError):
+        cipher.encrypt(b"payload", aad="not-bytes")
+    with pytest.raises(TypeError):
+        cipher.decrypt("not-an-envelope", aad=b"context")
+
+    envelope = cipher.encrypt(b"payload", aad=b"context")
+    with pytest.raises(ValueError, match="Phiên bản"):
+        cipher.decrypt(replace(envelope, schema_version=99), aad=b"context")
+    with pytest.raises(ValueError, match="Thuật toán"):
+        cipher.decrypt(replace(envelope, algorithm="AES-CBC"), aad=b"context")

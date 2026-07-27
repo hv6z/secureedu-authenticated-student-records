@@ -5,9 +5,10 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
-.pytest-tmp/
+.pytest-tmp*/
 .test-tmp*/
 .coverage
+coverage.json
 htmlcov/
 instance/*.db
 instance/*.db-shm

@@ -1,6 +1,6 @@
 # Kiến trúc hệ thống hiện thực
 
-Tài liệu này mô tả kiến trúc **as-built** của mã nguồn ngày 20/07/2026. Các thành phần chưa có trong source được tách riêng ở cuối tài liệu để tránh nhầm lẫn giữa hệ thống hiện tại và kiến trúc nâng cấp.
+Tài liệu này mô tả kiến trúc **as-built** của mã nguồn ngày 27/07/2026. Các thành phần chưa có trong source được tách riêng ở cuối tài liệu để tránh nhầm lẫn giữa hệ thống hiện tại và kiến trúc nâng cấp.
 
 ## 1. Phạm vi tin cậy
 

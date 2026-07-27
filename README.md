@@ -1,6 +1,10 @@
-# Secure Student Record Blockchain
+# SecureEdu Blockchain
+
+**Bảo mật hồ sơ sinh viên với AES-GCM và Blockchain**
 
 Hệ thống quản lý hồ sơ sinh viên có mã hóa và kiểm chứng toàn vẹn, xây dựng bằng Python, Flask và SQLite.
+
+![Python 3.12](https://img.shields.io/badge/Python-3.12-2563EB) ![Tests](https://img.shields.io/badge/tests-113%20passed-16A34A) ![Coverage](https://img.shields.io/badge/coverage-91%25-16A34A) ![UI](https://img.shields.io/badge/UI-responsive-1E3A5F)
 
 > **Trạng thái:** proof-of-concept phục vụ học tập và thực nghiệm. Phần lõi mã hóa, phiên bản hóa, đăng nhập/RBAC, truy vết người thao tác, sổ kiểm toán liên kết băm, xác minh và giao diện quản lý đã hoạt động. Hệ thống **không phải mạng blockchain phân tán** và chưa có KMS/HSM hoặc điểm neo độc lập, vì vậy chưa phù hợp để triển khai với dữ liệu sinh viên thật.
 
@@ -19,10 +23,10 @@ Mã sinh viên không được lưu ở dạng rõ. Hệ thống dẫn xuất m�
 
 ## Trạng thái rà soát
 
-| Hạng mục | Kết quả ngày 20/07/2026 |
+| Hạng mục | Kết quả ngày 27/07/2026 |
 |---|---|
-| Kiểm thử tự động | 79/79 đạt |
-| Độ bao phủ mã nguồn | 88% |
+| Kiểm thử tự động | 113/113 đạt |
+| Độ bao phủ mã nguồn | 91%; ngưỡng bắt buộc ≥ 90% |
 | Kiểm tra cú pháp Python | Đạt |
 | Cài đặt từ `requirements-lock.txt` | Đạt trên Python 3.12 |
 | Thử nhanh sau nâng cấp, 6 kiểu can thiệp | Phát hiện 6/6 lần |
@@ -30,6 +34,12 @@ Mã sinh viên không được lưu ở dạng rõ. Hệ thống dẫn xuất m�
 | Đăng nhập, khóa tạm và RBAC | Đã triển khai |
 | `actor_id` trong AAD, phiên bản và block | Đã triển khai; tương thích schema v1 |
 | Blockchain nhiều nút / neo hash độc lập | Chưa triển khai |
+
+## Giao diện SecureEdu
+
+Giao diện được thiết kế lại theo hướng dashboard bảo mật doanh nghiệp: responsive, điều hướng bàn phím, focus rõ, icon SVG thống nhất, trạng thái không chỉ dựa vào màu và hỗ trợ `prefers-reduced-motion`.
+
+![Dashboard SecureEdu Blockchain](docs/screenshots/dashboard-desktop.png)
 
 Kết luận: đề tài **đã đạt mức proof-of-concept nghiên cứu có kiểm soát truy cập**, nhưng vẫn cần quản lý khóa, HTTPS, vận hành an toàn và một điểm neo độc lập trước khi có thể xem là hệ thống thực tế. Xem báo cáo rà soát chi tiết tại [`docs/RA_SOAT_VA_CHINH_SUA.md`](docs/RA_SOAT_VA_CHINH_SUA.md).
 
@@ -166,15 +176,10 @@ python scripts/manage_user.py disable hocvu
 ## Kiểm thử
 
 ```powershell
-pytest -v
-pytest --cov=src --cov-report=term-missing
+python -m pytest -q
 ```
 
-Nếu Windows không cho pytest dùng thư mục tạm mặc định:
-
-```powershell
-pytest --basetemp=.pytest-tmp
-```
+`pytest.ini` đã cấu hình thư mục tạm trong workspace, báo cáo coverage và ngưỡng `--cov-fail-under=90`; lệnh trên sẽ thất bại nếu độ phủ giảm dưới yêu cầu.
 
 ## Thực nghiệm
 
