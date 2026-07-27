@@ -34,7 +34,7 @@ Hệ thống **chưa đạt mức triển khai với dữ liệu thật** vì ch
 | `pip check` | Không có phụ thuộc hỏng |
 | Biên dịch toàn bộ tệp Python | Đạt |
 | Kiểm thử tự động | 113/113 đạt |
-| Độ bao phủ | 91% tổng thể; đạt yêu cầu tối thiểu 90% |
+| Độ bao phủ | 91% tổng thể |
 | Thực nghiệm nhanh, 100 hồ sơ, 3 cấu hình | Đạt; xuất CSV + JSON metadata |
 | Tamper test sau nâng cấp, 6 kiểu × 1 lần | 6/6 phát hiện |
 | Tương thích database schema v1 | Đạt; dữ liệu cũ vẫn giải mã và xác minh được |
