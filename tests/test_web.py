@@ -102,6 +102,9 @@ def test_main_pages_are_available(client, path) -> None:
     response = client.get(path)
     assert response.status_code == 200
     assert b"SecureEdu Blockchain" in response.data
+    assert b'data-theme-toggle' in response.data
+    assert b'/static/js/theme.js' in response.data
+    assert b'content="light dark"' in response.data
 
 
 def test_anonymous_user_is_redirected_to_login(anonymous_client) -> None:

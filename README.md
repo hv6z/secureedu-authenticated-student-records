@@ -37,9 +37,15 @@ Mã sinh viên không được lưu ở dạng rõ. Hệ thống dẫn xuất m�
 
 ## Giao diện SecureEdu
 
-Giao diện được thiết kế lại theo hướng dashboard bảo mật doanh nghiệp: responsive, điều hướng bàn phím, focus rõ, icon SVG thống nhất, trạng thái không chỉ dựa vào màu và hỗ trợ `prefers-reduced-motion`.
+Giao diện được thiết kế lại theo hướng dashboard bảo mật doanh nghiệp: responsive, điều hướng bàn phím, focus rõ, icon SVG thống nhất, trạng thái không chỉ dựa vào màu và hỗ trợ `prefers-reduced-motion`. Chế độ sáng/tối tự nhận thiết lập hệ thống ở lần đầu, cho phép chuyển nhanh trên thanh điều hướng và ghi nhớ lựa chọn ngay trong trình duyệt.
 
 ![Dashboard SecureEdu Blockchain](docs/screenshots/dashboard-desktop.png)
+
+**Chế độ tối trên dashboard và cổng đăng nhập**
+
+![Dashboard SecureEdu Blockchain - chế độ tối](docs/screenshots/dashboard-dark.png)
+
+![Đăng nhập SecureEdu Blockchain - chế độ tối](docs/screenshots/login-dark.png)
 
 Kết luận: đề tài **đã đạt mức proof-of-concept nghiên cứu có kiểm soát truy cập**, nhưng vẫn cần quản lý khóa, HTTPS, vận hành an toàn và một điểm neo độc lập trước khi có thể xem là hệ thống thực tế. Xem báo cáo rà soát chi tiết tại [`docs/RA_SOAT_VA_CHINH_SUA.md`](docs/RA_SOAT_VA_CHINH_SUA.md).
 

@@ -32,6 +32,21 @@
 
 **Color Notes:** Trust navy + signature green + audit trail
 
+#### Dark mode palette
+
+| Role | Hex | CSS Variable |
+|------|-----|--------------|
+| Background | `#08111F` | `--color-background` |
+| Surface | `#111C2D` | `--color-surface` |
+| Surface subtle | `#162235` | `--color-surface-subtle` |
+| Foreground | `#F8FAFC` | `--color-foreground` |
+| Muted text | `#94A3B8` | `--color-muted` |
+| Border | `#26364B` | `--color-border` |
+| Link / secondary text | `#60A5FA` | `--color-secondary` |
+| Success text | `#86EFAC` | `--color-success-foreground` |
+
+Dark mode uses semantic token overrides under `html[data-theme="dark"]`; solid brand and CTA colors remain separate from text colors to preserve contrast. The first visit follows `prefers-color-scheme`, while an explicit user choice is stored locally.
+
 ### Typography
 
 - **Heading Font:** Fira Code
@@ -219,7 +234,7 @@ Before delivering any UI code, verify:
 - [ ] All icons from consistent icon set (Heroicons/Lucide)
 - [ ] `cursor-pointer` on all clickable elements
 - [ ] Hover states with smooth transitions (150-300ms)
-- [ ] Light mode: text contrast 4.5:1 minimum
+- [ ] Light and dark mode: primary text contrast 4.5:1 minimum
 - [ ] Focus states visible for keyboard navigation
 - [ ] `prefers-reduced-motion` respected
 - [ ] Responsive: 375px, 768px, 1024px, 1440px

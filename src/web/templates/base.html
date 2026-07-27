@@ -1,14 +1,22 @@
 {% from "_icons.html" import icon %}
+{% macro theme_toggle(extra_class='') -%}
+  <button class="theme-toggle {{ extra_class }}" type="button" data-theme-toggle aria-label="Chuyển sang giao diện tối" title="Chuyển sang giao diện tối">
+    <span class="theme-icon theme-icon-moon">{{ icon('moon', 19) }}</span>
+    <span class="theme-icon theme-icon-sun">{{ icon('sun', 19) }}</span>
+    <span class="sr-only" data-theme-label>Chuyển sang giao diện tối</span>
+  </button>
+{%- endmacro %}
 <!doctype html>
 <html lang="vi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#1e3a5f">
   <meta name="description" content="SecureEdu Blockchain — bảo mật và kiểm chứng hồ sơ sinh viên bằng AES-GCM và chuỗi liên kết băm.">
   <title>{% block title %}SecureEdu Blockchain{% endblock %}</title>
   <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="{{ 'app-authenticated' if current_user else 'app-public' }}">
@@ -23,6 +31,7 @@
         </span>
       </a>
       {% if current_user %}
+        {{ theme_toggle('theme-toggle-mobile') }}
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">
           {{ icon('menu', 22) }}
           <span class="sr-only">Mở trình đơn</span>
@@ -35,6 +44,7 @@
             <a class="{{ 'active' if request.endpoint == 'web.verification' else '' }}" href="{{ url_for('web.verification') }}">{{ icon('verify') }}<span>Xác minh</span></a>
           </div>
           <div class="nav-account">
+            {{ theme_toggle('theme-toggle-desktop') }}
             <span class="account-chip">
               <span class="account-avatar" aria-hidden="true">{{ current_user.username[:1]|upper }}</span>
               <span><strong>{{ current_user.username }}</strong><small>{{ role_label(current_user.role) }}</small></span>
@@ -46,7 +56,10 @@
           </div>
         </nav>
       {% else %}
-        <span class="public-security-label">{{ icon('lock', 17) }} Kết nối nội bộ được bảo vệ</span>
+        <div class="public-header-actions">
+          <span class="public-security-label">{{ icon('lock', 17) }} Kết nối nội bộ được bảo vệ</span>
+          {{ theme_toggle() }}
+        </div>
       {% endif %}
     </div>
   </header>
