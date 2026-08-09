@@ -14,3 +14,5 @@ instance/*.db
 instance/*.db-shm
 instance/*.db-wal
 work/
+.codex_doc_review/
+~$*.docx

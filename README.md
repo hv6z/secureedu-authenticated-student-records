@@ -189,6 +189,8 @@ python -m pytest -q
 
 ## Thực nghiệm
 
+Quy trình đầy đủ, tiêu chí kiểm tra dữ liệu và cách công bố kết quả được mô tả tại [`docs/THUC_NGHIEM_TAI_LAP.md`](docs/THUC_NGHIEM_TAI_LAP.md).
+
 Sinh dữ liệu mô phỏng:
 
 ```powershell

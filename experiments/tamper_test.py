@@ -20,6 +20,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.config import Settings  # noqa: E402
 from src.services.record_service import RecordService  # noqa: E402
+from experiments.system_metadata import collect_system_metadata  # noqa: E402
 
 
 Mutation = Callable[[sqlite3.Connection], None]
@@ -217,6 +218,7 @@ def write_metadata(output_path: Path, *, trials: int) -> None:
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "platform": platform.platform(),
         "processor": platform.processor() or "unknown",
+        **collect_system_metadata(PROJECT_ROOT),
         "python": sys.version,
         "sqlite": sqlite3.sqlite_version,
         "packages": packages,

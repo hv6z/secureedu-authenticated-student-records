@@ -22,6 +22,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from experiments.generate_dataset import generate_records  # noqa: E402
+from experiments.system_metadata import collect_system_metadata  # noqa: E402
 from src.encryption.aes_cipher import AesGcmCipher, EncryptedEnvelope  # noqa: E402
 from src.encryption.serialization import canonical_json_bytes  # noqa: E402
 from src.services.record_service import RecordService  # noqa: E402
@@ -324,6 +325,7 @@ def write_metadata(
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "platform": platform.platform(),
         "processor": platform.processor() or "unknown",
+        **collect_system_metadata(PROJECT_ROOT),
         "python": sys.version,
         "sqlite": sqlite3.sqlite_version,
         "packages": packages,
