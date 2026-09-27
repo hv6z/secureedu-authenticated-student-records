@@ -8,6 +8,8 @@ Hệ thống quản lý hồ sơ sinh viên có mã hóa và kiểm chứng toà
 
 > **Trạng thái:** proof-of-concept phục vụ nghiên cứu. Mỗi block có HMAC từ khóa audit tách miền và head mới nhất được checkpoint ngoài SQLite. Hệ thống **không phải mạng blockchain phân tán**; checkpoint phải được đặt trên miền lưu trữ mà DB writer không thể sửa. Hệ thống chưa có KMS/HSM và chưa phù hợp để triển khai với dữ liệu sinh viên thật.
 
+Phiên bản trên nhánh `main` là bản sửa đổi cho **REV-ECIT 2026**. Phiên bản đã nộp FAIR 2026 được đóng băng tại tag `fair-2026-submission` để bảo toàn khả năng tái lập.
+
 ## Tổng quan
 
 Mỗi thao tác tạo, cập nhật hoặc xóa logic một hồ sơ sẽ:

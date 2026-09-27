@@ -22,7 +22,7 @@ Hệ thống **chưa đạt mức triển khai với dữ liệu thật** vì ch
 ## Phạm vi đã đối chiếu
 
 - Mã nguồn trong workspace.
-- Repository công khai `hv6z/secureedu-authenticated-student-records`; nhánh sửa đổi `rev-ecit-2026-revision`.
+- Repository công khai `hv6z/secureedu-authenticated-student-records`; `main` là phiên bản REV-ECIT và bản FAIR được đóng băng bằng tag `fair-2026-submission`.
 - `filegoc.docx`.
 - `Kien_truc_xu_ly_AES_GCM_Blockchain_huong_dan_tai_lap_1.docx`.
 - Bộ kiểm thử, bộ dữ liệu và kết quả thực nghiệm đang có.
@@ -86,7 +86,7 @@ Lần chạy pytest đầu tiên gặp lỗi quyền truy cập thư mục tạm
 
 ## Trạng thái GitHub và workspace
 
-Workspace là clone độc lập của repository. Đợt sửa cho REV-ECIT được quản lý trên nhánh `rev-ecit-2026-revision`; `main` được giữ nguyên để tránh trộn thay đổi trước khi tác giả duyệt nội dung học thuật.
+Workspace là clone độc lập của repository. Đợt sửa đã được kiểm tra trên nhánh `rev-ecit-2026-revision` trước khi đưa lên `main`; phiên bản FAIR được giữ bằng tag cố định để tránh làm mất mốc tái lập.
 
 ## Nội dung đã cập nhật trong lần rà soát này
 
