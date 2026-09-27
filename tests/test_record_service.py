@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sqlite3
+from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
@@ -140,3 +141,24 @@ def test_create_rolls_back_when_block_append_fails(tmp_path, monkeypatch) -> Non
         assert connection.execute("SELECT count(*) FROM audit_blocks").fetchone()[0] == 1
     finally:
         connection.close()
+
+
+def test_concurrent_writers_keep_database_and_anchor_consistent(tmp_path) -> None:
+    path = tmp_path / "records.db"
+    key = b"f" * 32
+    RecordService(path, key).initialize()
+
+    def create(index: int) -> str:
+        service = RecordService(path, key)
+        created = service.create_student(_student(f"SV{index:04d}"))
+        return created["_record_id"]
+
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        record_ids = list(executor.map(create, range(32)))
+
+    service = RecordService(path, key)
+    assert len(record_ids) == len(set(record_ids)) == 32
+    assert len(service.list_students()) == 32
+    report = service.verify_all()
+    assert report.valid, report.messages
+    assert report.checked_versions == 32

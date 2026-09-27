@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import threading
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -43,6 +44,18 @@ from src.integrity import (
     write_audit_anchor,
 )
 from src.verification.verifier import VerificationReport, verify_database
+
+
+_WRITE_LOCKS: dict[Path, threading.RLock] = {}
+_WRITE_LOCKS_GUARD = threading.Lock()
+
+
+def _shared_write_lock(database_path: Path) -> threading.RLock:
+    """Trả về khóa ghi dùng chung cho mọi service trỏ tới cùng tệp DB."""
+
+    lock_key = database_path.resolve()
+    with _WRITE_LOCKS_GUARD:
+        return _WRITE_LOCKS.setdefault(lock_key, threading.RLock())
 
 
 class RecordServiceError(RuntimeError):
@@ -102,6 +115,7 @@ class RecordService:
         audit_anchor_path: str | Path | None = None,
     ) -> None:
         self.database_path = Path(database_path)
+        self._write_lock = _shared_write_lock(self.database_path)
         self.key_id = key_id
         self._cipher = AesGcmCipher(key, key_id=key_id)
         self._lookup_key = derive_lookup_key(key)
@@ -115,23 +129,24 @@ class RecordService:
         )
 
     def initialize(self) -> None:
-        anchor_bootstrap_allowed = initialize_database(
-            self.database_path, self._audit_key
-        )
-        connection = connect_database(self.database_path)
-        try:
-            head = latest_block(connection)
-            if self.audit_anchor_path.exists():
-                self._verify_anchor(head)
-            elif anchor_bootstrap_allowed:
-                self._write_anchor(head)
-            else:
-                raise RecordServiceError(
-                    "Thiếu checkpoint audit của cơ sở dữ liệu đã tồn tại; "
-                    "không tự động tạo lại để tránh che giấu rollback."
-                )
-        finally:
-            connection.close()
+        with self._write_lock:
+            anchor_bootstrap_allowed = initialize_database(
+                self.database_path, self._audit_key
+            )
+            connection = connect_database(self.database_path)
+            try:
+                head = latest_block(connection)
+                if self.audit_anchor_path.exists():
+                    self._verify_anchor(head)
+                elif anchor_bootstrap_allowed:
+                    self._write_anchor(head)
+                else:
+                    raise RecordServiceError(
+                        "Thiếu checkpoint audit của cơ sở dữ liệu đã tồn tại; "
+                        "không tự động tạo lại để tránh che giấu rollback."
+                    )
+            finally:
+                connection.close()
 
     def _verify_anchor(self, head) -> None:
         verify_audit_anchor(
@@ -279,35 +294,36 @@ class RecordService:
         record_id = str(uuid.uuid4())
         timestamp = _utc_now()
 
-        connection = connect_database(self.database_path)
-        try:
-            with immediate_transaction(connection):
-                self._verify_anchor_in_transaction(connection)
-                if get_record_by_token(connection, lookup_token) is not None:
-                    raise DuplicateStudentError("Mã sinh viên đã tồn tại.")
-                insert_record(
-                    connection,
-                    record_id=record_id,
-                    lookup_token=lookup_token,
-                    timestamp=timestamp,
-                )
-                self._write_version(
-                    connection,
-                    record_id=record_id,
-                    version=1,
-                    operation="CREATE",
-                    data=normalized,
-                    timestamp=timestamp,
-                    actor_id=actor_id,
-                    actor_role=actor_role,
-                )
-        except sqlite3.IntegrityError as exc:
-            raise RecordServiceError(
-                "Không thể ghi hồ sơ do ràng buộc toàn vẹn hoặc nonce bị trùng."
-            ) from exc
-        finally:
-            connection.close()
-        self._refresh_anchor()
+        with self._write_lock:
+            connection = connect_database(self.database_path)
+            try:
+                with immediate_transaction(connection):
+                    self._verify_anchor_in_transaction(connection)
+                    if get_record_by_token(connection, lookup_token) is not None:
+                        raise DuplicateStudentError("Mã sinh viên đã tồn tại.")
+                    insert_record(
+                        connection,
+                        record_id=record_id,
+                        lookup_token=lookup_token,
+                        timestamp=timestamp,
+                    )
+                    self._write_version(
+                        connection,
+                        record_id=record_id,
+                        version=1,
+                        operation="CREATE",
+                        data=normalized,
+                        timestamp=timestamp,
+                        actor_id=actor_id,
+                        actor_role=actor_role,
+                    )
+            except sqlite3.IntegrityError as exc:
+                raise RecordServiceError(
+                    "Không thể ghi hồ sơ do ràng buộc toàn vẹn hoặc nonce bị trùng."
+                ) from exc
+            finally:
+                connection.close()
+            self._refresh_anchor()
 
         record = StoredRecord(
             record_id=record_id,
@@ -336,42 +352,43 @@ class RecordService:
         )
         timestamp = _utc_now()
 
-        connection = connect_database(self.database_path)
-        try:
-            with immediate_transaction(connection):
-                self._verify_anchor_in_transaction(connection)
-                record = self._require_writable_record(connection, record_id)
-                self._check_version(record, expected_version)
-                owner = get_record_by_token(connection, lookup_token)
-                if owner is not None and owner.record_id != record_id:
-                    raise DuplicateStudentError("Mã sinh viên đã tồn tại.")
+        with self._write_lock:
+            connection = connect_database(self.database_path)
+            try:
+                with immediate_transaction(connection):
+                    self._verify_anchor_in_transaction(connection)
+                    record = self._require_writable_record(connection, record_id)
+                    self._check_version(record, expected_version)
+                    owner = get_record_by_token(connection, lookup_token)
+                    if owner is not None and owner.record_id != record_id:
+                        raise DuplicateStudentError("Mã sinh viên đã tồn tại.")
 
-                next_version = record.current_version + 1
-                self._write_version(
-                    connection,
-                    record_id=record_id,
-                    version=next_version,
-                    operation="UPDATE",
-                    data=normalized,
-                    timestamp=timestamp,
-                    actor_id=actor_id,
-                    actor_role=actor_role,
-                )
-                update_record_head(
-                    connection,
-                    record_id=record_id,
-                    version=next_version,
-                    lookup_token=lookup_token,
-                    status="active",
-                    timestamp=timestamp,
-                )
-        except sqlite3.IntegrityError as exc:
-            raise RecordServiceError(
-                "Không thể ghi phiên bản do ràng buộc toàn vẹn hoặc nonce bị trùng."
-            ) from exc
-        finally:
-            connection.close()
-        self._refresh_anchor()
+                    next_version = record.current_version + 1
+                    self._write_version(
+                        connection,
+                        record_id=record_id,
+                        version=next_version,
+                        operation="UPDATE",
+                        data=normalized,
+                        timestamp=timestamp,
+                        actor_id=actor_id,
+                        actor_role=actor_role,
+                    )
+                    update_record_head(
+                        connection,
+                        record_id=record_id,
+                        version=next_version,
+                        lookup_token=lookup_token,
+                        status="active",
+                        timestamp=timestamp,
+                    )
+            except sqlite3.IntegrityError as exc:
+                raise RecordServiceError(
+                    "Không thể ghi phiên bản do ràng buộc toàn vẹn hoặc nonce bị trùng."
+                ) from exc
+            finally:
+                connection.close()
+            self._refresh_anchor()
 
         updated = StoredRecord(
             record_id=record.record_id,
@@ -395,42 +412,45 @@ class RecordService:
         actor_id, actor_role = _validate_actor(actor_id, actor_role)
         timestamp = _utc_now()
 
-        connection = connect_database(self.database_path)
-        try:
-            with immediate_transaction(connection):
-                self._verify_anchor_in_transaction(connection)
-                record = self._require_writable_record(connection, record_id)
-                self._check_version(record, expected_version)
-                current = get_version(connection, record_id, record.current_version)
-                if current is None:
-                    raise RecordServiceError("Thiếu phiên bản hiện tại của hồ sơ.")
-                snapshot = self._decrypt_version(current)
-                next_version = record.current_version + 1
-                self._write_version(
-                    connection,
-                    record_id=record_id,
-                    version=next_version,
-                    operation="DELETE",
-                    data=snapshot,
-                    timestamp=timestamp,
-                    actor_id=actor_id,
-                    actor_role=actor_role,
-                )
-                update_record_head(
-                    connection,
-                    record_id=record_id,
-                    version=next_version,
-                    lookup_token=record.lookup_token,
-                    status="deleted",
-                    timestamp=timestamp,
-                )
-        except sqlite3.IntegrityError as exc:
-            raise RecordServiceError(
-                "Không thể ghi phiên bản xóa do nonce bị trùng."
-            ) from exc
-        finally:
-            connection.close()
-        self._refresh_anchor()
+        with self._write_lock:
+            connection = connect_database(self.database_path)
+            try:
+                with immediate_transaction(connection):
+                    self._verify_anchor_in_transaction(connection)
+                    record = self._require_writable_record(connection, record_id)
+                    self._check_version(record, expected_version)
+                    current = get_version(connection, record_id, record.current_version)
+                    if current is None:
+                        raise RecordServiceError(
+                            "Thiếu phiên bản hiện tại của hồ sơ."
+                        )
+                    snapshot = self._decrypt_version(current)
+                    next_version = record.current_version + 1
+                    self._write_version(
+                        connection,
+                        record_id=record_id,
+                        version=next_version,
+                        operation="DELETE",
+                        data=snapshot,
+                        timestamp=timestamp,
+                        actor_id=actor_id,
+                        actor_role=actor_role,
+                    )
+                    update_record_head(
+                        connection,
+                        record_id=record_id,
+                        version=next_version,
+                        lookup_token=record.lookup_token,
+                        status="deleted",
+                        timestamp=timestamp,
+                    )
+            except sqlite3.IntegrityError as exc:
+                raise RecordServiceError(
+                    "Không thể ghi phiên bản xóa do nonce bị trùng."
+                ) from exc
+            finally:
+                connection.close()
+            self._refresh_anchor()
 
         deleted = StoredRecord(
             record_id=record.record_id,
