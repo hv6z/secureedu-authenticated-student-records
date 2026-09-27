@@ -1,0 +1,21 @@
+{
+  "generated_at_utc": "2026-09-27T03:10:03.553593+00:00",
+  "processor_name": "Intel(R) Core(TM) i5-10300H CPU @ 2.50GHz",
+  "total_physical_memory_bytes": 8419053568,
+  "total_physical_memory_gib": 7.84,
+  "source_commit": "e039567b791c758be23225d93139d53125a13c03",
+  "source_dirty": true,
+  "source_tree_sha256": "e49647e2b7b51d6933d61d05a6cf65c4f475c1798f501ed044c0a42eba00eda3",
+  "experiment": {
+    "writers": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "total_records_per_run": 120,
+    "repeats": 10,
+    "seed": 2026,
+    "scope": "threads in one Python process; writes serialized through one shared lock"
+  }
+}

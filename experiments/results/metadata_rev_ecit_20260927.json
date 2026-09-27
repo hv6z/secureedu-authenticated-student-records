@@ -1,0 +1,44 @@
+{
+  "assembled_at_utc": "2026-09-27T03:40:00Z",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor_name": "Intel(R) Core(TM) i5-10300H CPU @ 2.50GHz",
+  "total_physical_memory_gib": 7.84,
+  "python": "3.12.14",
+  "sqlite": "3.53.1",
+  "packages": {
+    "Flask": "3.1.3",
+    "cryptography": "49.0.0",
+    "sqlcipher3": "0.6.2",
+    "SQLCipher": "4.12.0 community"
+  },
+  "source_commit_for_runtime_design": "c053ad4ac63448c74c3f82277d4af32f6d3b867c",
+  "source_dirty_note": "Individual metadata files report dirty because generated paper/result artifacts were present. No src/ runtime file changed during a timed profile; the exact executable-source digests remain in those files.",
+  "inputs": [
+    {
+      "raw": "raw_20260927T031609Z.csv",
+      "metadata": "metadata_20260927T031609Z.json",
+      "profiles": ["sqlite", "sqlite_aes", "sqlite_aes_chain"],
+      "sizes": [100, 1000],
+      "repeats": 10
+    },
+    {
+      "raw": "raw_20260927T032752Z.csv",
+      "metadata": "metadata_20260927T032752Z.json",
+      "profiles": ["sqlite", "sqlite_aes", "sqlite_aes_chain"],
+      "sizes": [10000],
+      "repeats": 3
+    },
+    {
+      "raw": "raw_20260927T033437Z.csv",
+      "metadata": "metadata_20260927T033437Z.json",
+      "profiles": ["sqlcipher"],
+      "sizes": [100, 1000, 10000],
+      "repeats": 10
+    }
+  ],
+  "combined_raw": "raw_rev_ecit_20260927.csv",
+  "combined_summary": "summary_rev_ecit_20260927.csv",
+  "seed": 2026,
+  "storage": "persistent Windows filesystem; not tmpfs",
+  "timer": "time.perf_counter_ns"
+}

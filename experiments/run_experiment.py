@@ -28,7 +28,7 @@ from src.encryption.serialization import canonical_json_bytes  # noqa: E402
 from src.services.record_service import RecordService  # noqa: E402
 
 
-PROFILES = ("sqlite", "sqlite_aes", "sqlite_aes_chain")
+PROFILES = ("sqlite", "sqlcipher", "sqlite_aes", "sqlite_aes_chain")
 METRICS = (
     "add_total_ms",
     "add_per_record_ms",
@@ -95,6 +95,62 @@ def benchmark_sqlite(records: list[dict[str, object]], database_path: Path) -> d
         "verify_total_ms": verify_total_ms,
         "encrypt_per_record_ms": 0.0,
         "decrypt_per_record_ms": 0.0,
+        "database_size_bytes": float(_database_size(database_path)),
+    }
+
+
+def benchmark_sqlcipher(
+    records: list[dict[str, object]], database_path: Path, key: bytes
+) -> dict[str, float]:
+    try:
+        from sqlcipher3 import dbapi2 as sqlcipher
+    except ImportError as exc:
+        raise RuntimeError(
+            "Cấu hình SQLCipher yêu cầu gói sqlcipher3."
+        ) from exc
+
+    connection = sqlcipher.connect(str(database_path))
+    connection.execute(f"PRAGMA key = \"x'{key.hex()}'\"")
+    connection.execute("PRAGMA journal_mode = WAL")
+    connection.execute(
+        "CREATE TABLE records (record_id TEXT PRIMARY KEY, payload TEXT NOT NULL)"
+    )
+
+    start = perf_counter_ns()
+    for record in records:
+        payload = json.dumps(
+            record, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        )
+        with connection:
+            connection.execute(
+                "INSERT INTO records(record_id, payload) VALUES (?, ?)",
+                (record["student_code"], payload),
+            )
+    add_total_ms = _elapsed_ms(start)
+
+    start = perf_counter_ns()
+    rows = connection.execute(
+        "SELECT payload FROM records ORDER BY record_id"
+    ).fetchall()
+    decoded = [json.loads(row[0]) for row in rows]
+    query_total_ms = _elapsed_ms(start)
+
+    start = perf_counter_ns()
+    integrity_errors = connection.execute("PRAGMA cipher_integrity_check").fetchall()
+    verify_total_ms = _elapsed_ms(start)
+    connection.close()
+    if integrity_errors or len(decoded) != len(records):
+        raise RuntimeError("SQLCipher không vượt qua kiểm tra toàn vẹn.")
+
+    size = len(records)
+    return {
+        "add_total_ms": add_total_ms,
+        "add_per_record_ms": add_total_ms / size,
+        "query_total_ms": query_total_ms,
+        "query_per_record_ms": query_total_ms / size,
+        "verify_total_ms": verify_total_ms,
+        "encrypt_per_record_ms": float("nan"),
+        "decrypt_per_record_ms": float("nan"),
         "database_size_bytes": float(_database_size(database_path)),
     }
 
@@ -241,6 +297,7 @@ def run_benchmarks(
     rows: list[dict[str, object]] = []
     functions = {
         "sqlite": lambda records, path: benchmark_sqlite(records, path),
+        "sqlcipher": lambda records, path: benchmark_sqlcipher(records, path, key),
         "sqlite_aes": lambda records, path: benchmark_sqlite_aes(records, path, key),
         "sqlite_aes_chain": lambda records, path: benchmark_full(records, path, key),
     }
@@ -316,7 +373,7 @@ def write_metadata(
 ) -> None:
     """Ghi bối cảnh chạy để số liệu có thể được đối chiếu và tái lập."""
     packages: dict[str, str] = {}
-    for package in ("Flask", "cryptography"):
+    for package in ("Flask", "cryptography", "sqlcipher3"):
         try:
             packages[package] = importlib.metadata.version(package)
         except importlib.metadata.PackageNotFoundError:

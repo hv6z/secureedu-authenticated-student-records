@@ -14,6 +14,7 @@ instance/*.db
 instance/*.db-shm
 instance/*.db-wal
 instance/*.audit-anchor.json
+instance/matplotlib/
 *.db.audit-anchor.json
 work/
 .codex_doc_review/

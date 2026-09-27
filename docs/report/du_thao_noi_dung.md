@@ -2,6 +2,8 @@
 
 ## trạng thái tài liệu
 
+> **Lưu trữ lịch sử:** tài liệu này chứa số liệu FAIR cũ và đã được thay thế bởi `REV_ECIT_2026_manuscript.md`, `SecureEdu_REV_ECIT_2026.docx` và `SecureEdu_REV_ECIT_2026.pdf`. Không trích các bảng bên dưới cho bản nộp mới.
+
 Tệp này đang được sửa sau phản biện FAIR 2026. Phiên bản mã nguồn mới có HMAC cho từng block, checkpoint head ngoài SQLite, 117 kiểm thử tự động và độ bao phủ 90,82%. Các số liệu hiệu năng ngày 12/07/2026 thuộc thiết kế cũ và chỉ được giữ làm dấu vết; không dùng làm kết quả của bản REV-ECIT trước khi chạy lại.
 
 Bộ số liệu 30 lần lặp được tạo trước đợt bổ sung đăng nhập/RBAC và actor schema v2 ngày 20/07/2026. Chức năng mới đã qua kiểm thử và chạy benchmark nhanh, nhưng phải chạy lại bộ 30 lần lặp trước khi dùng số hiệu năng như kết quả cuối của phiên bản hiện tại.

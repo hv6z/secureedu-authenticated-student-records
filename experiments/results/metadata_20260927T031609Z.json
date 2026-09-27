@@ -1,0 +1,31 @@
+{
+  "generated_at_utc": "2026-09-27T03:16:09.628691+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel",
+  "processor_name": "Intel(R) Core(TM) i5-10300H CPU @ 2.50GHz",
+  "total_physical_memory_bytes": 8419053568,
+  "total_physical_memory_gib": 7.84,
+  "source_commit": "c053ad4ac63448c74c3f82277d4af32f6d3b867c",
+  "source_dirty": true,
+  "source_tree_sha256": "c3669391febd50aaab3e7471fa0b70b579e11133057d9602ddb3b06a71971e35",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "sqlite": "3.53.1",
+  "packages": {
+    "Flask": "3.1.3",
+    "cryptography": "49.0.0"
+  },
+  "experiment": {
+    "sizes": [
+      100,
+      1000
+    ],
+    "repeats": 10,
+    "profiles": [
+      "sqlite",
+      "sqlite_aes",
+      "sqlite_aes_chain"
+    ],
+    "seed": 2026,
+    "timer": "time.perf_counter_ns"
+  }
+}

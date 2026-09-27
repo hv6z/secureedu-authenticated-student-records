@@ -66,9 +66,26 @@ def _git_commit(project_root: Path) -> str:
 
 
 def _git_dirty(project_root: Path) -> bool | None:
+    source_pathspecs = [
+        "src",
+        "tests",
+        ":(glob)experiments/*.py",
+        ":(glob)scripts/*.py",
+        "pytest.ini",
+        "requirements.txt",
+        "requirements-dev.txt",
+        "requirements-lock.txt",
+    ]
     try:
         completed = subprocess.run(
-            ["git", "status", "--porcelain"],
+            [
+                "git",
+                "status",
+                "--porcelain",
+                "--untracked-files=all",
+                "--",
+                *source_pathspecs,
+            ],
             cwd=project_root,
             check=True,
             capture_output=True,

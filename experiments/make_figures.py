@@ -16,8 +16,9 @@ DEFAULT_FIGURE_DIR = PROJECT_ROOT / "docs" / "figures"
 
 PROFILE_LABELS = {
     "sqlite": "chỉ SQLite",
+    "sqlcipher": "SQLCipher 4.12",
     "sqlite_aes": "SQLite và AES-GCM",
-    "sqlite_aes_chain": "SQLite, AES-GCM và chuỗi băm",
+    "sqlite_aes_chain": "SecureEdu đầy đủ",
 }
 
 FIGURES = (

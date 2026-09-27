@@ -116,7 +116,7 @@ Lưu ý: `cryptography.hazmat.primitives.ciphers.aead.AESGCM` trả về ciphert
 - Xem các khối kiểm toán sau khi khởi động lại ứng dụng.
 - Xác minh toàn hệ thống hoặc một hồ sơ cụ thể.
 - Sinh dữ liệu mô phỏng 100, 1.000 và 10.000 hồ sơ.
-- So sánh ba cấu hình: SQLite; SQLite + AES-GCM; SQLite + AES-GCM + sổ kiểm toán.
+- So sánh bốn cấu hình: SQLite; SQLCipher 4.12; SQLite + AES-GCM; SecureEdu đầy đủ.
 - Xuất dữ liệu thô, thống kê, metadata môi trường và biểu đồ.
 - Thử thay đổi trái phép trên cơ sở dữ liệu tạm.
 
@@ -220,11 +220,14 @@ python experiments/run_experiment.py --sizes 100 --repeats 1
 Chạy cấu hình dùng cho báo cáo:
 
 ```powershell
-python experiments/run_experiment.py --sizes 100 1000 10000 --repeats 30
-python experiments/make_figures.py
+python experiments/run_experiment.py --sizes 100 1000 --repeats 10
+python experiments/run_experiment.py --sizes 10000 --repeats 3
+python experiments/run_experiment.py --sizes 100 1000 10000 --repeats 10 --profiles sqlcipher
+python experiments/make_figures.py --input experiments/results/summary_rev_ecit_20260927.csv
+python experiments/contention_benchmark.py --writers 1 2 4 8 --records 120 --repeats 10
 ```
 
-Mỗi cấu hình ghi một hồ sơ bằng một giao dịch SQLite và dùng WAL. Thứ tự cấu hình được xáo trộn có thể tái lập theo từng lần lặp. Ba phép `verify` không tương đương về chức năng: SQLite chỉ kiểm tra khả năng đọc/JSON, AES xác thực từng bản mã, còn cấu hình đầy đủ kiểm tra cả AES và chuỗi liên kết băm.
+Mỗi cấu hình ghi một hồ sơ bằng một giao dịch và dùng WAL. Thứ tự cấu hình được xáo trộn có thể tái lập theo từng lần lặp. Các phép `verify` không tương đương về chức năng: SQLite kiểm tra khả năng đọc/JSON; SQLCipher chạy `cipher_integrity_check`; AES-GCM xác thực từng bản mã; SecureEdu kiểm tra thêm cấu trúc phiên bản, block HMAC và checkpoint ngoài SQLite.
 
 Các tệp `raw_*.csv`, `summary_*.csv` và `metadata_*.json` được lưu trong `experiments/results`. Không chỉnh số liệu thô bằng tay.
 
