@@ -1,0 +1,35 @@
+{
+  "generated_at_utc": "2026-09-25T06:50:10.103950+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel",
+  "processor_name": "Intel(R) Core(TM) i5-10300H CPU @ 2.50GHz",
+  "total_physical_memory_bytes": 8419053568,
+  "total_physical_memory_gib": 7.84,
+  "source_commit": "8705a8504175cd59cfc2d9fd55b054f236414eb1",
+  "source_dirty": true,
+  "source_tree_sha256": "c4ef4e22f342f088cd0000ad00ae96dcfcd2f9642e39c64ad5f475822c4fc315",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "sqlite": "3.53.1",
+  "packages": {
+    "Flask": "3.1.3",
+    "cryptography": "49.0.0"
+  },
+  "tamper_experiment": {
+    "trials_per_case": 30,
+    "cases": [
+      "thay_doi_ban_ma",
+      "thay_doi_the_xac_thuc",
+      "thay_doi_nonce",
+      "thay_doi_bam_phong_bi",
+      "thay_doi_lien_ket_khoi",
+      "xoa_khoi_giua",
+      "sua_va_bam_lai",
+      "sua_timestamp_va_bam_lai",
+      "xoa_ho_so_va_noi_lai_chuoi",
+      "cat_duoi_va_sua_head",
+      "ghep_lich_su_hop_le",
+      "sap_xep_va_danh_chi_muc_lai",
+      "rollback_rieng_mot_ho_so"
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 # Kiến trúc hệ thống hiện thực
 
-Tài liệu này mô tả kiến trúc **as-built** của mã nguồn ngày 27/07/2026. Các thành phần chưa có trong source được tách riêng ở cuối tài liệu để tránh nhầm lẫn giữa hệ thống hiện tại và kiến trúc nâng cấp.
+Tài liệu này mô tả kiến trúc **as-built** của mã nguồn ngày 27/09/2026. Các thành phần chưa có trong source được tách riêng ở cuối tài liệu để tránh nhầm lẫn giữa hệ thống hiện tại và kiến trúc nâng cấp.
 
 ## 1. Phạm vi tin cậy
 
@@ -12,17 +12,19 @@ flowchart LR
         F["Flask trên 127.0.0.1:5000"]
         E[".env<br/>AES_KEY + FLASK_SECRET_KEY"]
         DB[("SQLite<br/>instance/student_records.db")]
+        CP["Checkpoint JSON có HMAC<br/>nằm ngoài SQLite"]
         U --> A --> F
         A --> DB
         F --> E
         F --> DB
+        F --> CP
     end
 
     X["Người không truy cập được máy/cổng"] -.->|"bị chặn bởi ranh giới triển khai"| HOST
-    K["KMS/HSM hoặc điểm neo độc lập"] -.->|"chưa có"| HOST
+    K["KMS/HSM, chữ ký bất đối xứng<br/>hoặc điểm neo WORM độc lập"] -.->|"chưa có"| HOST
 ```
 
-Ứng dụng xác thực bằng password hash `scrypt`, khóa tài khoản tạm thời, phiên ký, CSRF token và RBAC. Ranh giới triển khai vẫn phụ thuộc vào quyền truy cập máy, bảo vệ `.env` và việc chỉ lắng nghe trên `127.0.0.1`.
+Ứng dụng xác thực bằng password hash `scrypt`, khóa tài khoản tạm thời, phiên ký, CSRF token và RBAC. Checkpoint có HMAC giúp phát hiện rollback SQLite khi tệp checkpoint được giữ nguyên, nhưng checkpoint và khóa vẫn thuộc cùng máy. Ranh giới triển khai do đó vẫn phụ thuộc vào quyền truy cập máy, bảo vệ `.env` và việc chỉ lắng nghe trên `127.0.0.1`.
 
 ## 2. Sơ đồ thành phần
 
@@ -39,6 +41,7 @@ flowchart TB
     AES["src/encryption/aes_cipher.py<br/>AES-256-GCM"]
     LOOKUP["src/integrity/lookup.py<br/>derive key + HMAC"]
     HASH["src/integrity/hashing.py<br/>envelope hash"]
+    AUDIT["src/integrity/audit.py<br/>block HMAC + checkpoint"]
     REPO["src/database/repository.py<br/>đọc/ghi bản ghi"]
     BLOCK["src/blockchain/block.py<br/>block hash"]
     CHAIN["src/blockchain/chain.py<br/>nối/đọc chuỗi"]
@@ -46,6 +49,7 @@ flowchart TB
     CONN["src/database/connection.py<br/>BEGIN IMMEDIATE"]
     SCHEMA["src/database/schema.py<br/>schema + genesis"]
     DB[("SQLite/WAL")]
+    CHECKPOINT["Tệp checkpoint JSON<br/>ngoài SQLite"]
 
     UI --> WEB_AUTH --> ROUTE --> SERVICE
     WEB_AUTH --> AUTH --> CONN
@@ -53,6 +57,7 @@ flowchart TB
     SERVICE --> SERIAL --> AES
     SERVICE --> LOOKUP
     SERVICE --> HASH
+    SERVICE --> AUDIT
     SERVICE --> REPO
     SERVICE --> CHAIN
     SERVICE --> VERIFY
@@ -61,11 +66,13 @@ flowchart TB
     CHAIN --> CONN
     VERIFY --> REPO
     VERIFY --> CHAIN
+    VERIFY --> AUDIT
+    AUDIT --> CHECKPOINT
     CONN --> DB
     SCHEMA --> DB
 ```
 
-`routes.py` không tự mã hóa, tính băm hoặc chạy SQL. `RecordService` là điểm điều phối duy nhất để phiên bản mã hóa và khối kiểm toán luôn đi qua cùng một transaction.
+`routes.py` không tự mã hóa, tính băm hoặc chạy SQL. `RecordService` là điểm điều phối duy nhất để phiên bản mã hóa và khối kiểm toán đi qua cùng một transaction SQLite. Checkpoint được thay thế nguyên tử sau khi transaction commit; đây không phải transaction nguyên tử xuyên hai tài nguyên.
 
 ## 3. Luồng tạo/cập nhật/xóa
 
@@ -79,7 +86,8 @@ sequenceDiagram
     participant Domain as student.py
     participant Crypto as AES-GCM + HMAC + SHA-256
     participant DB as SQLite transaction
-    participant Chain as Hash-chained ledger
+    participant Chain as Authenticated audit ledger
+    participant CP as External checkpoint
 
     User->>Auth: Đăng nhập
     Auth-->>User: Session đã ký + role
@@ -98,6 +106,7 @@ sequenceDiagram
     Service->>DB: Cập nhật current_version/status
     alt Mọi bước thành công
         Service->>DB: COMMIT
+        Service->>CP: Thay thế nguyên tử checkpoint đã ký HMAC
         Service-->>Web: Hồ sơ và metadata
     else Có lỗi hoặc xung đột
         Service->>DB: ROLLBACK
@@ -133,7 +142,9 @@ flowchart TD
     B -- Không --> X["Ghi lỗi vào VerificationReport"]
     B -- Có --> C{"block_index liên tục?<br/>block_hash tính lại đúng?<br/>previous_hash nối đúng?"}
     C -- Không --> X
-    C -- Có --> D["Đọc records và record_versions"]
+    C -- Có --> C2{"block_mac của từng khối đúng?<br/>Checkpoint khớp chính xác đầu chuỗi?"}
+    C2 -- Không --> X
+    C2 -- Có --> D["Đọc records và record_versions"]
     D --> E{"current_version, status,<br/>thứ tự version hợp lệ?"}
     E -- Không --> X
     E -- Có --> F{"Mỗi version có đúng một block?<br/>operation, timestamp và actor khớp?"}
@@ -206,6 +217,7 @@ erDiagram
         TEXT actor_id
         TEXT actor_role
         TEXT block_hash UK
+        TEXT block_mac
     }
 ```
 
@@ -219,12 +231,12 @@ Quan hệ `record_versions` - `audit_blocks` được xác minh ở tầng ứng
 | Tra cứu | HMAC `lookup_token` |
 | Mật mã | `algorithm`, `key_id`, nonce, ciphertext kèm tag |
 | Phiên bản | version, operation, timestamp, status |
-| Kiểm toán | envelope hash, previous hash, block hash |
+| Kiểm toán | envelope hash, previous hash, block hash và `block_mac` HMAC |
 | Tài khoản | username, password hash `scrypt`, role, trạng thái khóa; không lưu mật khẩu rõ |
 | Chủ thể thao tác | `actor_id` và role trong phiên bản mã hóa lẫn block |
 | Dữ liệu nghiệp vụ | Không lưu rõ; nằm trong JSON đã mã hóa |
 
-Khóa AES và khóa phiên Flask nằm trong `.env`, không nằm trong SQLite hoặc Git.
+Khóa AES và khóa phiên Flask nằm trong `.env`, không nằm trong SQLite hoặc Git. Tệp checkpoint ngoài SQLite lưu chỉ mục, hash đầu chuỗi và HMAC xác thực; nó không chứa dữ liệu nghiệp vụ rõ.
 
 ## 7. So sánh với kiến trúc đề xuất
 
@@ -236,23 +248,24 @@ Khóa AES và khóa phiên Flask nằm trong `.env`, không nằm trong SQLite h
 | Phiên bản hóa và xóa logic | Đã có | `RecordService` + SQLite |
 | Transaction nguyên tử | Đã có | `BEGIN IMMEDIATE` + rollback |
 | Sổ kiểm toán liên kết băm | Đã có | Một chuỗi toàn cục, một nút |
-| Xác minh nhiều lớp | Đã có | Chuỗi, phiên bản, hash, AES-GCM, HMAC |
+| Xác minh nhiều lớp | Đã có | Chuỗi, block HMAC, checkpoint, phiên bản, hash, AES-GCM, HMAC tra cứu |
 | CSRF và HTTP security headers | Đã có | Kèm `Cache-Control: no-store` cho trang đã đăng nhập |
 | Đăng nhập và password hashing | Đã có | `scrypt`, khóa tạm và phiên hết hạn |
 | RBAC | Đã có | `admin`, `registrar`, `auditor` |
 | `actor_id` trong AAD/block | Đã có | Schema v2; đọc/xác minh được schema v1 |
 | KMS/HSM và xoay khóa | Chưa có | `.env` chỉ phù hợp proof-of-concept |
-| Chữ ký số / neo hash độc lập | Chưa có | Cần để tăng khả năng chống viết lại lịch sử |
+| Block HMAC + checkpoint ngoài SQLite | Đã có | Phát hiện sửa khối và rollback DB khi khóa/checkpoint còn nguyên |
+| Chữ ký số / KMS-HSM / neo WORM độc lập | Chưa có | Cần để chống quản trị viên máy viết lại cả DB, checkpoint và khóa |
 | Blockchain permissioned nhiều nút | Chưa có | Không nên tuyên bố tính bất biến phân tán |
 
 ## 8. Thứ tự nâng cấp đề xuất
 
 ```mermaid
 flowchart LR
-    A["1. Quản lý và xoay khóa"] --> B["2. Ký số hoặc neo hash độc lập"]
-    B --> C["3. HTTPS + triển khai + giám sát"]
-    C --> D["4. Audit sự kiện đăng nhập"]
+    A["1. Quản lý và xoay khóa"] --> B["2. Neo WORM hoặc ký số bằng khóa tách biệt"]
+    B --> C["3. Phục hồi sai lệch DB-checkpoint sau sự cố"]
+    C --> D["4. HTTPS + triển khai + giám sát"]
     D --> E["5. Mạng permissioned nếu thực sự cần"]
 ```
 
-Các bước 1-4 cần hoàn thành trước khi cân nhắc dữ liệu thật. Bước 5 là quyết định kiến trúc riêng, không phải điều kiện bắt buộc cho mục tiêu proof-of-concept hiện tại.
+Các bước 1-4 cần hoàn thành trước khi cân nhắc dữ liệu thật. Bước 3 đặc biệt cần thiết vì commit SQLite có thể thành công nhưng tiến trình dừng trước khi checkpoint được thay. Bước 5 là quyết định kiến trúc riêng, không phải điều kiện bắt buộc cho mục tiêu proof-of-concept hiện tại.

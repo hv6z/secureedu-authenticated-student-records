@@ -20,7 +20,12 @@ from src.database.repository import (
 )
 from src.encryption.aes_cipher import AesGcmCipher, EncryptedEnvelope
 from src.encryption.serialization import make_aad
-from src.integrity import calculate_envelope_hash, calculate_lookup_token
+from src.integrity import (
+    AuditAnchorError,
+    calculate_envelope_hash,
+    calculate_lookup_token,
+    verify_audit_anchor,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -55,12 +60,17 @@ def _same_text(left: str, right: str) -> bool:
     return hmac.compare_digest(left.encode("utf-8"), right.encode("utf-8"))
 
 
-def _verify_chain(blocks: list[AuditBlock], messages: list[str]) -> None:
+def _verify_chain(
+    blocks: list[AuditBlock], messages: list[str], audit_key: bytes
+) -> None:
     if not blocks:
         messages.append("Chuỗi kiểm toán không có khối khởi nguyên.")
         return
 
-    expected_genesis = genesis_block()
+    expected_genesis = genesis_block(
+        audit_key,
+        block_schema_version=blocks[0].block_schema_version,
+    )
     if blocks[0] != expected_genesis:
         messages.append("Khối khởi nguyên không còn đúng giá trị cố định.")
 
@@ -73,6 +83,8 @@ def _verify_chain(blocks: list[AuditBlock], messages: list[str]) -> None:
             )
         if not _same_text(block.block_hash, block.expected_hash()):
             messages.append(f"Giá trị băm của khối {block.block_index} không hợp lệ.")
+        if not block.has_valid_mac(audit_key):
+            messages.append(f"HMAC của khối {block.block_index} không hợp lệ.")
         if block.block_hash in seen_hashes:
             messages.append(f"Giá trị băm khối {block.block_index} bị lặp.")
         seen_hashes.add(block.block_hash)
@@ -127,6 +139,8 @@ def verify_database(
     database_path: str | Path,
     cipher: AesGcmCipher,
     *,
+    audit_key: bytes,
+    audit_anchor_path: str | Path,
     record_id: str | None = None,
     lookup_key: bytes | None = None,
 ) -> VerificationReport:
@@ -137,7 +151,19 @@ def verify_database(
     checked_versions = 0
     try:
         blocks = list_blocks(connection)
-        _verify_chain(blocks, messages)
+        _verify_chain(blocks, messages, audit_key)
+        if blocks:
+            head = blocks[-1]
+            try:
+                verify_audit_anchor(
+                    audit_anchor_path,
+                    audit_key,
+                    block_index=head.block_index,
+                    block_hash=head.block_hash,
+                    block_mac=head.block_mac,
+                )
+            except AuditAnchorError as exc:
+                messages.append(str(exc))
 
         if record_id is None:
             records = list_records(connection)

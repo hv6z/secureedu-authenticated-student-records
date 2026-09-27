@@ -1,6 +1,6 @@
 # Rà soát đề tài và danh sách hoàn thiện
 
-Ngày rà soát gần nhất: **27/07/2026**.
+Ngày rà soát gần nhất: **27/09/2026**.
 
 ## Kết luận ngắn
 
@@ -15,13 +15,14 @@ Ngày rà soát gần nhất: **27/07/2026**.
 - có dữ liệu mô phỏng, thực nghiệm ba cấu hình, metadata và biểu đồ.
 - có đăng nhập, password hashing `scrypt`, khóa tài khoản tạm thời và RBAC;
 - có `actor_id`/vai trò được bảo vệ trong AAD, phiên bản mã hóa và block.
+- mỗi block có HMAC và đầu chuỗi được đối chiếu với checkpoint nằm ngoài SQLite.
 
-Hệ thống **chưa đạt mức triển khai với dữ liệu thật** vì chưa có quản lý vòng đời khóa, chữ ký/điểm neo độc lập, HTTPS và quy trình vận hành an toàn.
+Hệ thống **chưa đạt mức triển khai với dữ liệu thật** vì chưa có quản lý vòng đời khóa, chữ ký bất đối xứng/điểm neo WORM độc lập, HTTPS và quy trình vận hành an toàn.
 
 ## Phạm vi đã đối chiếu
 
 - Mã nguồn trong workspace.
-- Repository công khai `hv6z/secure_student_record_blockchain`, nhánh mặc định `main`.
+- Repository công khai `hv6z/secureedu-authenticated-student-records`; nhánh sửa đổi `rev-ecit-2026-revision`.
 - `filegoc.docx`.
 - `Kien_truc_xu_ly_AES_GCM_Blockchain_huong_dan_tai_lap_1.docx`.
 - Bộ kiểm thử, bộ dữ liệu và kết quả thực nghiệm đang có.
@@ -33,13 +34,13 @@ Hệ thống **chưa đạt mức triển khai với dữ liệu thật** vì ch
 | Cài `requirements-lock.txt` trong môi trường mới | Đạt |
 | `pip check` | Không có phụ thuộc hỏng |
 | Biên dịch toàn bộ tệp Python | Đạt |
-| Kiểm thử tự động | 113/113 đạt |
-| Độ bao phủ | 91% tổng thể |
-| Thực nghiệm nhanh, 100 hồ sơ, 3 cấu hình | Đạt; xuất CSV + JSON metadata |
-| Tamper test sau nâng cấp, 6 kiểu × 1 lần | 6/6 phát hiện |
-| Tương thích database schema v1 | Đạt; dữ liệu cũ vẫn giải mã và xác minh được |
+| Kiểm thử tự động | 116/116 đạt |
+| Độ bao phủ | 90,81% tổng thể |
+| Benchmark FAIR đã lưu | Giữ để tham chiếu; cần chạy lại sau thay đổi schema v4 |
+| Tamper test sau nâng cấp | 13 kiểu × 30 lần; 390/390 phát hiện |
+| Migration database schema v1-v3 lên v4 | Đạt; backfill `block_mac` và checkpoint |
 | Bộ kết quả báo cáo có sẵn | 3 quy mô × 3 cấu hình × 30 lần lặp |
-| Bộ thử can thiệp có sẵn | 6 kiểu × 30 lần = 180 lần |
+| Bộ thử can thiệp có sẵn | 13 kiểu × 30 lần = 390 lần, gồm 210 ca thích nghi |
 | Giao diện web | Đã thiết kế lại toàn bộ, responsive 375–1440 px, kiểm tra Chrome không tràn ngang |
 | Accessibility UI | Có skip link, focus-visible, label biểu mẫu, icon SVG, touch target và reduced-motion |
 
@@ -71,10 +72,11 @@ Lần chạy pytest đầu tiên gặp lỗi quyền truy cập thư mục tạm
 
 ### Mức trung bình - giới hạn tính bất biến và vận hành
 
-1. **Sổ kiểm toán và dữ liệu cùng nằm trong một SQLite.** Người có toàn quyền database và khóa có thể viết lại cả dữ liệu lẫn chuỗi.
-2. **Chưa neo `block_hash` cuối ra vị trí độc lập hoặc ký số block.** Không phát hiện được rollback toàn bộ database về một snapshot cũ.
-3. **Xóa là xóa logic.** Dữ liệu cũ vẫn tồn tại ở dạng mã hóa; cần đánh giá yêu cầu xóa dữ liệu cá nhân trước triển khai thật.
-4. **Chưa có CI, dependency/security scan, backup/restore test và hướng dẫn HTTPS/deployment.**
+1. **Checkpoint nằm ngoài SQLite nhưng vẫn trên cùng máy.** Cơ chế hiện tại phát hiện rollback DB khi checkpoint còn nguyên; người có toàn quyền máy và khóa vẫn có thể viết lại cả DB lẫn checkpoint.
+2. **Chưa có neo WORM/remote hoặc chữ ký bằng khóa tách biệt.** HMAC không cung cấp khả năng quy trách nhiệm như chữ ký bất đối xứng.
+3. **DB và checkpoint không có transaction nguyên tử chung.** Sự cố ngay sau commit có thể tạo sai lệch cần quy trình phục hồi có kiểm soát.
+4. **Xóa là xóa logic.** Dữ liệu cũ vẫn tồn tại ở dạng mã hóa; cần đánh giá yêu cầu xóa dữ liệu cá nhân trước triển khai thật.
+5. **Chưa có CI, dependency/security scan, backup/restore test và hướng dẫn HTTPS/deployment.**
 
 ### Mức thấp - đóng gói repository
 
@@ -84,9 +86,7 @@ Lần chạy pytest đầu tiên gặp lỗi quyền truy cập thư mục tạm
 
 ## Trạng thái GitHub và workspace
 
-Nhánh `main` công khai trên GitHub được đẩy gần nhất ngày 12/07/2026. Workspace đang rà soát chứa phiên bản mới hơn ở hầu hết tệp mã nguồn và tài liệu, nhưng thư mục dự án hiện không có `.git` riêng; Git đang nhận repository cha `D:/HUIT`.
-
-Vì vậy, các cập nhật README/sơ đồ trong workspace **chưa tự xuất hiện trên GitHub**. Trước khi đẩy, cần đưa đúng thư mục này vào clone của repository hoặc khởi tạo/đặt lại Git đúng phạm vi, kiểm tra diff, rồi commit lên nhánh phù hợp. Không nên commit toàn bộ `D:/HUIT`.
+Workspace là clone độc lập của repository. Đợt sửa cho REV-ECIT được quản lý trên nhánh `rev-ecit-2026-revision`; `main` được giữ nguyên để tránh trộn thay đổi trước khi tác giả duyệt nội dung học thuật.
 
 ## Nội dung đã cập nhật trong lần rà soát này
 
@@ -98,9 +98,10 @@ Vì vậy, các cập nhật README/sơ đồ trong workspace **chưa tự xuấ
 6. Bổ sung `users`, trang đăng nhập, session hết hạn, lockout và RBAC.
 7. Bổ sung `scripts/manage_user.py` để tạo, liệt kê, đổi mật khẩu/vai trò và vô hiệu hóa tài khoản.
 8. Nâng schema mật mã/block lên v2 để bảo vệ `actor_id`/role, kèm migration v1.
-9. Bổ sung kiểm thử nhánh bảo mật và đặt ngưỡng coverage bắt buộc 90%; kết quả hiện tại 113/113 test, 91%.
-10. Thiết kế lại toàn bộ giao diện thành **SecureEdu Blockchain** theo design system enterprise, dùng icon SVG và responsive.
+9. Bổ sung kiểm thử nhánh bảo mật và đặt ngưỡng coverage bắt buộc 90%; kết quả hiện tại 116/116 test, 90,81%.
+10. Đổi tên giao diện thành **SecureEdu Audit Ledger**, giữ route/package nội bộ `blockchain` để tương thích.
 11. Kiểm tra thực tế bằng Chrome ở 1440 px và 375 px; không có tràn ngang, menu mobile và luồng đăng nhập hoạt động.
+12. Nâng schema lên v4 với `block_mac`, checkpoint ngoài SQLite và bộ thử 13 kiểu can thiệp, gồm các ca thích nghi.
 
 ## Checklist trước khi nộp báo cáo
 
@@ -111,7 +112,7 @@ Vì vậy, các cập nhật README/sơ đồ trong workspace **chưa tự xuấ
 - [x] Bổ sung ảnh giao diện thật với dữ liệu mô phỏng trong `docs/screenshots/`.
 - [ ] Ghi rõ các phép `verify` của ba cấu hình không tương đương về chức năng.
 - [ ] Dùng thuật ngữ “sổ nhật ký kiểm toán liên kết băm một nút” hoặc “private blockchain prototype”.
-- [ ] Đồng bộ đúng phiên bản workspace lên GitHub.
+- [x] Chuẩn bị đúng phiên bản workspace trên nhánh sửa đổi để đồng bộ GitHub.
 
 ## Checklist trước khi thử nghiệm với dữ liệu thật
 
@@ -120,6 +121,7 @@ Vì vậy, các cập nhật README/sơ đồ trong workspace **chưa tự xuấ
 - [x] `actor_id`/role trong AAD và block kiểm toán.
 - [ ] KMS/HSM, xoay khóa, backup và diễn tập khôi phục.
 - [ ] HTTPS, cấu hình cookie `Secure`, logging và giám sát.
-- [ ] Chữ ký số hoặc neo hash cuối ra hệ thống độc lập.
+- [x] HMAC từng block và checkpoint ngoài SQLite cho phạm vi proof-of-concept.
+- [ ] Chữ ký bất đối xứng hoặc neo WORM/remote với khóa tách biệt cho triển khai thật.
 - [ ] Đánh giá quyền riêng tư, thời hạn lưu và quy trình xóa dữ liệu.
 - [ ] Pen-test, dependency audit và kiểm thử backup/restore.

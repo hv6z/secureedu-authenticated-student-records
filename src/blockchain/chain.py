@@ -23,20 +23,24 @@ def list_blocks(
     return [block_from_row(row) for row in rows]
 
 
-def latest_block(connection: sqlite3.Connection) -> AuditBlock:
+def latest_block(
+    connection: sqlite3.Connection, audit_key: bytes | None = None
+) -> AuditBlock:
     row = connection.execute(
         "SELECT * FROM audit_blocks ORDER BY block_index DESC LIMIT 1"
     ).fetchone()
     if row is None:
         # Trường hợp này chỉ hỗ trợ phục hồi cơ sở dữ liệu vừa tạo nhưng chưa khởi tạo.
-        block = genesis_block()
+        if audit_key is None:
+            raise RuntimeError("Cần audit_key để tạo khối khởi nguyên.")
+        block = genesis_block(audit_key)
         connection.execute(
             """
             INSERT INTO audit_blocks (
                 block_index, timestamp, previous_hash, record_id,
                 version, operation, envelope_hash, block_schema_version,
-                actor_id, actor_role, block_hash
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                actor_id, actor_role, block_hash, block_mac
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             block.as_database_tuple(),
         )
@@ -52,13 +56,15 @@ def append_block(
     version: int,
     operation: str,
     envelope_hash: str,
+    audit_key: bytes,
     actor_id: str = "system",
     actor_role: str = "system",
 ) -> AuditBlock:
     """Nối khối mới; hàm gọi phải đang giữ giao dịch BEGIN IMMEDIATE."""
 
     block = new_block(
-        latest_block(connection),
+        latest_block(connection, audit_key),
+        audit_key,
         timestamp=timestamp,
         record_id=record_id,
         version=version,
@@ -72,8 +78,8 @@ def append_block(
         INSERT INTO audit_blocks (
             block_index, timestamp, previous_hash, record_id,
             version, operation, envelope_hash, block_schema_version,
-            actor_id, actor_role, block_hash
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            actor_id, actor_role, block_hash, block_mac
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         block.as_database_tuple(),
     )

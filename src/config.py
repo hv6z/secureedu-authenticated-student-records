@@ -78,6 +78,7 @@ class Settings:
     database_path: Path
     encryption_key: bytes
     flask_secret_key: str
+    audit_anchor_path: Path | None = None
     key_id: str = "key-v1"
     testing: bool = False
     session_lifetime_minutes: int = 30
@@ -108,10 +109,20 @@ class Settings:
             if configured_path.is_absolute()
             else PROJECT_ROOT / configured_path
         )
+        configured_anchor = os.getenv("AUDIT_ANCHOR_PATH", "").strip()
+        audit_anchor_path = None
+        if configured_anchor:
+            anchor_path = Path(configured_anchor)
+            audit_anchor_path = (
+                anchor_path
+                if anchor_path.is_absolute()
+                else PROJECT_ROOT / anchor_path
+            )
         return cls(
             database_path=database_path,
             encryption_key=decode_aes_key(encoded_key),
             flask_secret_key=secret_key,
+            audit_anchor_path=audit_anchor_path,
             key_id=os.getenv("KEY_ID", "key-v1").strip() or "key-v1",
             testing=testing,
             session_lifetime_minutes=_positive_integer_from_env(

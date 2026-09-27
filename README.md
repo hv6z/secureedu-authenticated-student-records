@@ -1,12 +1,12 @@
-# SecureEdu Blockchain
+# SecureEdu
 
-**Bảo mật hồ sơ sinh viên với AES-GCM và Blockchain**
+**Bảo mật hồ sơ sinh viên với mã hóa xác thực và nhật ký audit có khóa**
 
 Hệ thống quản lý hồ sơ sinh viên có mã hóa và kiểm chứng toàn vẹn, xây dựng bằng Python, Flask và SQLite.
 
-![Python 3.12](https://img.shields.io/badge/Python-3.12-2563EB) ![Tests](https://img.shields.io/badge/tests-113%20passed-16A34A) ![Coverage](https://img.shields.io/badge/coverage-91%25-16A34A) ![UI](https://img.shields.io/badge/UI-responsive-1E3A5F)
+![Python 3.12](https://img.shields.io/badge/Python-3.12-2563EB) ![Tests](https://img.shields.io/badge/tests-116%20passed-16A34A) ![Coverage](https://img.shields.io/badge/coverage-90.81%25-16A34A) ![UI](https://img.shields.io/badge/UI-responsive-1E3A5F)
 
-> **Trạng thái:** proof-of-concept phục vụ học tập và thực nghiệm. Phần lõi mã hóa, phiên bản hóa, đăng nhập/RBAC, truy vết người thao tác, sổ kiểm toán liên kết băm, xác minh và giao diện quản lý đã hoạt động. Hệ thống **không phải mạng blockchain phân tán** và chưa có KMS/HSM hoặc điểm neo độc lập, vì vậy chưa phù hợp để triển khai với dữ liệu sinh viên thật.
+> **Trạng thái:** proof-of-concept phục vụ nghiên cứu. Mỗi block có HMAC từ khóa audit tách miền và head mới nhất được checkpoint ngoài SQLite. Hệ thống **không phải mạng blockchain phân tán**; checkpoint phải được đặt trên miền lưu trữ mà DB writer không thể sửa. Hệ thống chưa có KMS/HSM và chưa phù hợp để triển khai với dữ liệu sinh viên thật.
 
 ## Tổng quan
 
@@ -16,36 +16,38 @@ Mỗi thao tác tạo, cập nhật hoặc xóa logic một hồ sơ sẽ:
 2. tạo phiên bản hồ sơ mới;
 3. mã hóa JSON bằng AES-256-GCM với nonce 12 byte mới;
 4. gắn `actor_id`/vai trò vào AAD và tính SHA-256 cho phong bì mã hóa;
-5. nối một khối kiểm toán với khối trước;
+5. nối một khối kiểm toán với khối trước và xác thực block bằng HMAC;
 6. ghi phiên bản, khối và con trỏ phiên bản trong **cùng một giao dịch SQLite**.
+
+Sau khi SQLite commit, tệp checkpoint ngoài database được thay thế nguyên tử bằng head mới nhất. Bộ xác minh yêu cầu HMAC của từng block hợp lệ và checkpoint khớp chính xác với head, nhờ đó DB writer không thể che giấu việc sửa rồi rehash hoặc cắt lịch sử chỉ bằng cách sửa SQLite. Hai bước commit SQLite và thay checkpoint không tạo thành một giao dịch nguyên tử xuyên hai tài nguyên.
 
 Mã sinh viên không được lưu ở dạng rõ. Hệ thống dẫn xuất một khóa tra cứu riêng và lưu HMAC-SHA-256 để hỗ trợ tìm kiếm chính xác.
 
 ## Trạng thái rà soát
 
-| Hạng mục | Kết quả ngày 27/07/2026 |
+| Hạng mục | Kết quả cập nhật ngày 27/09/2026 |
 |---|---|
-| Kiểm thử tự động | 113/113 đạt |
-| Độ bao phủ mã nguồn | 91%; ngưỡng bắt buộc ≥ 90% |
+| Kiểm thử tự động | 116/116 đạt |
+| Độ bao phủ mã nguồn | 90,81%; ngưỡng bắt buộc ≥ 90% |
 | Kiểm tra cú pháp Python | Đạt |
 | Cài đặt từ `requirements-lock.txt` | Đạt trên Python 3.12 |
-| Thử nhanh sau nâng cấp, 6 kiểu can thiệp | Phát hiện 6/6 lần |
-| Thực nghiệm nhanh 3 cấu hình, 100 hồ sơ | Xuất đủ CSV và metadata |
+| Thử can thiệp, 13 kịch bản × 30 lần | Từ chối 390/390 trạng thái bị sửa; gồm 210 lần thử DB writer thích nghi |
+| Benchmark FAIR đã lưu | Dùng làm mốc tham chiếu; cần chạy lại sau schema v4 |
 | Đăng nhập, khóa tạm và RBAC | Đã triển khai |
 | `actor_id` trong AAD, phiên bản và block | Đã triển khai; tương thích schema v1 |
-| Blockchain nhiều nút / neo hash độc lập | Chưa triển khai |
+| HMAC block / checkpoint ngoài SQLite | Đã triển khai; checkpoint phải được bảo vệ độc lập với quyền ghi DB |
 
 ## Giao diện SecureEdu
 
 Giao diện được thiết kế lại theo hướng dashboard bảo mật doanh nghiệp: responsive, điều hướng bàn phím, focus rõ, icon SVG thống nhất, trạng thái không chỉ dựa vào màu và hỗ trợ `prefers-reduced-motion`. Chế độ sáng/tối tự nhận thiết lập hệ thống ở lần đầu, cho phép chuyển nhanh trên thanh điều hướng và ghi nhớ lựa chọn ngay trong trình duyệt.
 
-![Dashboard SecureEdu Blockchain](docs/screenshots/dashboard-desktop.png)
+![Dashboard SecureEdu Audit Ledger](docs/screenshots/dashboard-desktop.png)
 
 **Chế độ tối trên dashboard và cổng đăng nhập**
 
-![Dashboard SecureEdu Blockchain - chế độ tối](docs/screenshots/dashboard-dark.png)
+![Dashboard SecureEdu Audit Ledger - chế độ tối](docs/screenshots/dashboard-dark.png)
 
-![Đăng nhập SecureEdu Blockchain - chế độ tối](docs/screenshots/login-dark.png)
+![Đăng nhập SecureEdu Audit Ledger - chế độ tối](docs/screenshots/login-dark.png)
 
 Kết luận: đề tài **đã đạt mức proof-of-concept nghiên cứu có kiểm soát truy cập**, nhưng vẫn cần quản lý khóa, HTTPS, vận hành an toàn và một điểm neo độc lập trước khi có thể xem là hệ thống thực tế. Xem báo cáo rà soát chi tiết tại [`docs/RA_SOAT_VA_CHINH_SUA.md`](docs/RA_SOAT_VA_CHINH_SUA.md).
 
@@ -64,7 +66,7 @@ flowchart TB
     S --> D["domain/student.py<br/>chuẩn hóa và kiểm tra"]
     S --> A["encryption/aes_cipher.py<br/>AES-256-GCM"]
     S --> L["integrity/lookup.py<br/>HMAC-SHA-256"]
-    S --> H["integrity/hashing.py<br/>SHA-256 phong bì"]
+    S --> H["integrity/hashing.py + audit.py<br/>SHA-256 + HMAC audit"]
     S --> R["database/repository.py<br/>phiên bản mã hóa"]
     S --> C["blockchain/chain.py<br/>khối liên kết băm"]
     S --> V["verification/verifier.py<br/>xác minh nhiều lớp"]
@@ -73,8 +75,10 @@ flowchart TB
     C --> T
     T --> DB[("SQLite/WAL<br/>records + record_versions + audit_blocks")]
     V --> DB
+    S --> P["Checkpoint head có HMAC<br/>ngoài SQLite"]
+    V --> P
 
-    N["Chưa triển khai:<br/>KMS/HSM, chữ ký/điểm neo,<br/>HTTPS production, nhiều nút"] -.-> W
+    N["Chưa triển khai:<br/>KMS/HSM, atomic commit DB-checkpoint,<br/>HTTPS production, nhiều nút"] -.-> W
 ```
 
 Tài liệu kiến trúc đầy đủ gồm luồng ghi, luồng xác minh và lược đồ dữ liệu: [`docs/KIEN_TRUC_HE_THONG.md`](docs/KIEN_TRUC_HE_THONG.md).
@@ -87,7 +91,8 @@ Tài liệu kiến trúc đầy đủ gồm luồng ghi, luồng xác minh và l
 | Tìm kiếm kín | HMAC-SHA-256 với khóa dẫn xuất | Tra mã sinh viên mà không lưu mã rõ |
 | Xác thực ngữ cảnh | AAD gồm `record_id`, `version`, `operation`, `schema_version` | Ngăn tráo bản mã giữa hồ sơ hoặc phiên bản |
 | Toàn vẹn phong bì | SHA-256 có phân tách miền | Phát hiện thay đổi nonce, ciphertext hoặc metadata |
-| Toàn vẹn lịch sử | `previous_hash` và `block_hash` | Phát hiện sửa, chèn, xóa hoặc đổi thứ tự khối |
+| Xác thực lịch sử | HMAC-SHA-256 trên từng `block_hash` bằng khóa audit dẫn xuất riêng | Chặn DB writer tính lại chuỗi sau khi sửa dữ liệu nếu không có khóa |
+| Độ mới của lịch sử | Checkpoint head có HMAC nằm ngoài SQLite | Phát hiện rollback hoặc cắt suffix khi checkpoint không thuộc quyền sửa của DB writer |
 | Nhất quán dữ liệu | `BEGIN IMMEDIATE`, COMMIT/ROLLBACK | Phiên bản và khối được ghi nguyên tử |
 | An toàn biểu mẫu | CSRF token, giới hạn nội dung, security headers | Giảm rủi ro trên giao diện web cục bộ |
 | Chống ghi đè | `expected_version` | Phát hiện cập nhật trên phiên bản đã cũ |
@@ -118,8 +123,8 @@ Lưu ý: `cryptography.hazmat.primitives.ciphers.aead.AESGCM` trả về ciphert
 ## Cài đặt nhanh
 
 ```powershell
-git clone https://github.com/hv6z/secure_student_record_blockchain.git
-cd secure_student_record_blockchain
+git clone https://github.com/hv6z/secureedu-authenticated-student-records.git
+cd secureedu-authenticated-student-records
 
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
@@ -173,6 +178,7 @@ python scripts/manage_user.py disable hocvu
 | `AES_KEY` | Có | Không có | Khóa AES 32 byte, mã hóa Base64 |
 | `FLASK_SECRET_KEY` | Có | Không có | Ký phiên và CSRF token |
 | `DATABASE_PATH` | Không | `instance/student_records.db` | Đường dẫn SQLite |
+| `AUDIT_ANCHOR_PATH` | Không | `<DATABASE_PATH>.audit-anchor.json` | Checkpoint head; khi triển khai phải đặt trên miền lưu trữ tách quyền ghi SQLite |
 | `KEY_ID` | Không | `key-v1` | Nhãn nhận dạng khóa, không phải khóa bí mật |
 | `SESSION_LIFETIME_MINUTES` | Không | `30` | Thời gian tồn tại của phiên đăng nhập |
 | `LOGIN_MAX_ATTEMPTS` | Không | `5` | Số lần sai trước khi khóa tạm |
@@ -222,17 +228,17 @@ Thử can thiệp trên cơ sở dữ liệu tạm:
 python experiments/tamper_test.py --trials 30
 ```
 
-Các trường hợp gồm thay đổi ciphertext, thẻ xác thực, nonce, băm phong bì, liên kết khối và xóa khối giữa.
+Chương trình tách hai nhóm rõ ràng: sáu mutation không sửa trạng thái phụ thuộc và bảy chiến lược DB writer thích nghi gồm modify-and-rehash, sửa timestamp rồi rehash, xóa hồ sơ rồi nối lại chuỗi, cắt suffix và sửa head, ghép lịch sử hợp lệ, reorder/reindex và rollback riêng một hồ sơ.
 
 ## Cấu trúc dự án
 
 ```text
-secure_student_record_blockchain/
+secureedu-authenticated-student-records/
 ├── src/
 │   ├── domain/          chuẩn hóa và kiểm tra hồ sơ
 │   ├── auth/            tài khoản, password hashing và khóa đăng nhập
 │   ├── encryption/      JSON chuẩn và AES-GCM
-│   ├── integrity/       HMAC tra cứu và SHA-256
+│   ├── integrity/       HMAC tra cứu, HMAC audit, checkpoint và SHA-256
 │   ├── database/        kết nối, schema và repository
 │   ├── blockchain/      cấu trúc khối và chuỗi liên kết băm
 │   ├── verification/    xác minh chuỗi, phong bì và AES-GCM
@@ -247,11 +253,12 @@ secure_student_record_blockchain/
 ## Mô hình tin cậy và giới hạn
 
 - Đây là **sổ nhật ký kiểm toán liên kết băm một nút**, không phải blockchain permissioned nhiều nút.
-- Người có quyền sửa toàn bộ SQLite và biết khóa có thể tính lại lịch sử.
-- Khôi phục đồng thời database và khóa về một bản cũ không thể bị phát hiện nếu không neo đầu chuỗi ra vị trí độc lập.
+- DB writer có quyền sửa SQLite nhưng không có khóa audit và không có quyền sửa checkpoint sẽ bị phát hiện khi rehash, xóa chọn lọc, reorder hoặc rollback.
+- Người chiếm đồng thời SQLite, khóa gốc và checkpoint vẫn có thể dựng lại lịch sử hợp lệ; HMAC không thay thế KMS/HSM hoặc chữ ký bằng khóa ký tách biệt.
+- Commit SQLite và cập nhật checkpoint là hai thao tác liên tiếp, không phải một giao dịch nguyên tử xuyên hai tài nguyên. Sự cố giữa hai bước làm hệ thống fail-closed và cần quy trình khôi phục có kiểm soát.
 - Đăng nhập/RBAC giảm truy cập trái phép ở tầng ứng dụng nhưng không bảo vệ khi máy chủ, database và khóa đều bị chiếm quyền.
 - Xóa là xóa logic; các phiên bản cũ vẫn tồn tại ở dạng mã hóa để bảo toàn lịch sử kiểm toán.
-- Chưa có KMS/HSM, xoay khóa, sao lưu khóa có kiểm soát, chữ ký số hoặc kiểm toán danh tính người thao tác.
+- Chưa có KMS/HSM, xoay khóa, sao lưu khóa có kiểm soát hoặc chữ ký số bằng khóa bất đối xứng.
 - Chỉ nên dùng dữ liệu mô phỏng cho đến khi có cơ chế truy cập phù hợp và phê duyệt xử lý dữ liệu cá nhân.
 
 ## Tài liệu
@@ -264,7 +271,7 @@ secure_student_record_blockchain/
 ## Hướng phát triển ưu tiên
 
 1. Bổ sung KMS/HSM, phiên bản khóa và quy trình xoay/chuyển đổi dữ liệu.
-2. Ký số hoặc neo định kỳ `block_hash` cuối vào kho độc lập.
+2. Đưa khóa audit vào KMS/HSM và đặt checkpoint trên kho độc lập có kiểm soát phiên bản/WORM.
 3. Bổ sung CI, dependency audit, backup/restore test và triển khai HTTPS.
 4. Thêm giao diện quản trị tài khoản có bước xác nhận lại mật khẩu và nhật ký sự kiện đăng nhập.
 5. Nếu cần tính bất biến mạnh, chuyển sổ kiểm toán sang mạng permissioned nhiều tổ chức.

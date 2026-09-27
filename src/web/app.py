@@ -39,6 +39,7 @@ def create_app(settings: Settings | None = None) -> Flask:
         resolved.database_path,
         resolved.encryption_key,
         key_id=resolved.key_id,
+        audit_anchor_path=resolved.audit_anchor_path,
     )
     service.initialize()
     app.extensions["record_service"] = service

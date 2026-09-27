@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "_icons.html" import icon %}
-{% block title %}Đăng nhập | SecureEdu Blockchain{% endblock %}
+{% block title %}Đăng nhập | SecureEdu Audit Ledger{% endblock %}
 {% block content %}
 <section class="login-shell">
   <div class="login-intro">
@@ -10,7 +10,7 @@
     <div class="login-feature-list">
       <div><span class="feature-icon">{{ icon('lock', 21) }}</span><p><strong>AES-256-GCM</strong><small>Bảo mật nội dung và phát hiện chỉnh sửa bản mã.</small></p></div>
       <div><span class="feature-icon">{{ icon('users', 21) }}</span><p><strong>Kiểm soát RBAC</strong><small>Phân quyền quản trị, học vụ và kiểm toán rõ ràng.</small></p></div>
-      <div><span class="feature-icon">{{ icon('blocks', 21) }}</span><p><strong>Blockchain audit</strong><small>Liên kết dấu vết thay đổi theo từng phiên bản hồ sơ.</small></p></div>
+      <div><span class="feature-icon">{{ icon('blocks', 21) }}</span><p><strong>Authenticated audit</strong><small>HMAC và checkpoint bảo vệ dấu vết thay đổi theo từng phiên bản.</small></p></div>
     </div>
     <div class="login-proof">{{ icon('shield', 18) }} <span>Phiên đăng nhập được ký, giới hạn thời gian và bảo vệ CSRF.</span></div>
   </div>

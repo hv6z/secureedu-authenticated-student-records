@@ -13,6 +13,8 @@ htmlcov/
 instance/*.db
 instance/*.db-shm
 instance/*.db-wal
+instance/*.audit-anchor.json
+*.db.audit-anchor.json
 work/
 .codex_doc_review/
 ~$*.docx

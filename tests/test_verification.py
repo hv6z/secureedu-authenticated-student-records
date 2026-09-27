@@ -7,6 +7,7 @@ import sqlite3
 import pytest
 
 from src.services.record_service import RecordService
+from src.blockchain.block import calculate_block_hash
 
 
 def _student(code: str = "SV001") -> dict:
@@ -146,3 +147,88 @@ def test_reordered_or_rewritten_block_is_detected(populated) -> None:
     assert not report.valid
     assert any("Giá trị băm của khối 1" in message for message in report.messages)
     assert any("không có phiên bản" in message for message in report.messages)
+
+
+def test_modify_and_rehash_is_rejected_by_block_mac(populated) -> None:
+    path, service, _ = populated
+    connection = sqlite3.connect(path)
+    connection.row_factory = sqlite3.Row
+    try:
+        rows = connection.execute(
+            "SELECT * FROM audit_blocks ORDER BY block_index"
+        ).fetchall()
+        previous_hash = rows[0]["block_hash"]
+        for row in rows[1:]:
+            timestamp = (
+                "2030-01-01T00:00:00.000000Z"
+                if row["block_index"] == 1
+                else row["timestamp"]
+            )
+            block_hash = calculate_block_hash(
+                block_index=row["block_index"],
+                timestamp=timestamp,
+                previous_hash=previous_hash,
+                record_id=row["record_id"],
+                version=row["version"],
+                operation=row["operation"],
+                envelope_hash=row["envelope_hash"],
+                block_schema_version=row["block_schema_version"],
+                actor_id=row["actor_id"],
+                actor_role=row["actor_role"],
+            )
+            connection.execute(
+                "UPDATE audit_blocks SET timestamp = ?, previous_hash = ?, "
+                "block_hash = ? WHERE block_index = ?",
+                (timestamp, previous_hash, block_hash, row["block_index"]),
+            )
+            if row["block_index"] == 1:
+                connection.execute(
+                    "UPDATE record_versions SET created_at = ? "
+                    "WHERE record_id = ? AND version = ?",
+                    (timestamp, row["record_id"], row["version"]),
+                )
+            previous_hash = block_hash
+        connection.commit()
+    finally:
+        connection.close()
+
+    report = service.verify_all()
+    assert not report.valid
+    assert any("HMAC của khối" in message for message in report.messages)
+
+
+def test_consistent_suffix_truncation_is_rejected_by_external_anchor(
+    populated,
+) -> None:
+    path, service, _ = populated
+    connection = sqlite3.connect(path)
+    try:
+        last = connection.execute(
+            "SELECT record_id, version FROM audit_blocks "
+            "ORDER BY block_index DESC LIMIT 1"
+        ).fetchone()
+        connection.execute(
+            "DELETE FROM audit_blocks WHERE block_index = "
+            "(SELECT MAX(block_index) FROM audit_blocks)"
+        )
+        connection.execute(
+            "DELETE FROM record_versions WHERE record_id = ? AND version = ?",
+            last,
+        )
+        connection.execute("DELETE FROM records WHERE record_id = ?", (last[0],))
+        connection.commit()
+    finally:
+        connection.close()
+
+    report = service.verify_all()
+    assert not report.valid
+    assert any("checkpoint audit không khớp" in message.casefold() for message in report.messages)
+
+
+def test_missing_anchor_fails_closed(populated) -> None:
+    _, service, _ = populated
+    service.audit_anchor_path.unlink()
+
+    report = service.verify_all()
+    assert not report.valid
+    assert any("Thiếu checkpoint audit" in message for message in report.messages)

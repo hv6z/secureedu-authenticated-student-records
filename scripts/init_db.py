@@ -21,6 +21,7 @@ def main() -> int:
         settings.database_path,
         settings.encryption_key,
         key_id=settings.key_id,
+        audit_anchor_path=settings.audit_anchor_path,
     )
     service.initialize()
     print(f"Đã khởi tạo cơ sở dữ liệu: {settings.database_path}")

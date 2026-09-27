@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% from "_icons.html" import icon %}
-{% block title %}Tổng quan | SecureEdu Blockchain{% endblock %}
+{% block title %}Tổng quan | SecureEdu Audit Ledger{% endblock %}
 {% block content %}
 <section class="hero security-hero">
   <div class="hero-copy">
     <span class="eyebrow"><span class="live-dot"></span> Trung tâm vận hành bảo mật</span>
-    <h1>Bảo mật hồ sơ sinh viên với <span>AES-GCM</span> và Blockchain</h1>
+    <h1>Hồ sơ sinh viên phiên bản với <span>AES-GCM</span> và audit có xác thực</h1>
     <p>Quản lý dữ liệu nhạy cảm, truy vết mọi thay đổi và xác minh tính toàn vẹn trong một quy trình thống nhất.</p>
     <div class="hero-actions">
       {% if can_manage_records() %}
@@ -99,8 +99,8 @@
 {% if recent_blocks %}
 <section class="panel recent-chain">
   <div class="panel-heading">
-    <div><span class="eyebrow">Nhật ký mới nhất</span><h2>Dòng thời gian Blockchain</h2></div>
-    <a class="text-link" href="{{ url_for('web.blockchain') }}">Xem toàn chuỗi {{ icon('arrow-right', 17) }}</a>
+    <div><span class="eyebrow">Nhật ký mới nhất</span><h2>Dòng thời gian audit</h2></div>
+    <a class="text-link" href="{{ url_for('web.blockchain') }}">Xem toàn bộ nhật ký {{ icon('arrow-right', 17) }}</a>
   </div>
   <div class="timeline-horizontal">
     {% for block in recent_blocks %}

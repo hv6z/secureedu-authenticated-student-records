@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% from "_icons.html" import icon %}
-{% block title %}Blockchain | SecureEdu Blockchain{% endblock %}
+{% block title %}Nhật ký audit | SecureEdu Audit Ledger{% endblock %}
 {% block content %}
 <header class="page-header">
-  <div><span class="eyebrow">Hash-linked audit ledger</span><h1>Chuỗi kiểm toán Blockchain</h1><p>Mỗi thay đổi tạo một khối chứa dấu vết phiên bản và liên kết với giá trị băm của khối trước.</p></div>
+  <div><span class="eyebrow">Authenticated audit ledger</span><h1>Nhật ký kiểm toán có xác thực</h1><p>Mỗi thay đổi tạo một block liên kết với block trước và được xác thực bằng HMAC.</p></div>
   <a class="button button-secondary" href="{{ url_for('web.verification') }}">{{ icon('verify') }} Kiểm tra toàn chuỗi</a>
 </header>
 
-<div class="notice notice-info">{{ icon('blocks') }}<div><strong>Mô hình Blockchain riêng tư một nút</strong><span>Sổ kiểm toán liên kết băm phục vụ nghiên cứu; không phải mạng phân tán nhiều nút.</span></div></div>
+<div class="notice notice-info">{{ icon('blocks') }}<div><strong>Authenticated audit log một nút</strong><span>HMAC bảo vệ từng block; checkpoint ngoài SQLite giúp phát hiện rollback trong ranh giới tin cậy đã nêu.</span></div></div>
 
 <section class="chain-summary" aria-label="Tổng quan chuỗi">
   <div>{{ icon('blocks', 21) }}<span>Tổng số khối</span><strong>{{ blocks|length }}</strong></div>

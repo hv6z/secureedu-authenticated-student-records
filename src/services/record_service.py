@@ -9,7 +9,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
-from src.blockchain.chain import append_block, list_blocks as read_blocks
+from src.blockchain.chain import (
+    append_block,
+    latest_block,
+    list_blocks as read_blocks,
+)
 from src.database.connection import connect_database, immediate_transaction
 from src.database.repository import (
     StoredRecord,
@@ -33,7 +37,10 @@ from src.encryption.serialization import canonical_json_bytes, make_aad
 from src.integrity import (
     calculate_envelope_hash,
     calculate_lookup_token,
+    derive_audit_key,
     derive_lookup_key,
+    verify_audit_anchor,
+    write_audit_anchor,
 )
 from src.verification.verifier import VerificationReport, verify_database
 
@@ -92,14 +99,69 @@ class RecordService:
         database_path: str | Path,
         key: bytes,
         key_id: str = "key-v1",
+        audit_anchor_path: str | Path | None = None,
     ) -> None:
         self.database_path = Path(database_path)
         self.key_id = key_id
         self._cipher = AesGcmCipher(key, key_id=key_id)
         self._lookup_key = derive_lookup_key(key)
+        self._audit_key = derive_audit_key(key)
+        self.audit_anchor_path = (
+            Path(audit_anchor_path)
+            if audit_anchor_path is not None
+            else self.database_path.with_suffix(
+                self.database_path.suffix + ".audit-anchor.json"
+            )
+        )
 
     def initialize(self) -> None:
-        initialize_database(self.database_path)
+        anchor_bootstrap_allowed = initialize_database(
+            self.database_path, self._audit_key
+        )
+        connection = connect_database(self.database_path)
+        try:
+            head = latest_block(connection)
+            if self.audit_anchor_path.exists():
+                self._verify_anchor(head)
+            elif anchor_bootstrap_allowed:
+                self._write_anchor(head)
+            else:
+                raise RecordServiceError(
+                    "Thiếu checkpoint audit của cơ sở dữ liệu đã tồn tại; "
+                    "không tự động tạo lại để tránh che giấu rollback."
+                )
+        finally:
+            connection.close()
+
+    def _verify_anchor(self, head) -> None:
+        verify_audit_anchor(
+            self.audit_anchor_path,
+            self._audit_key,
+            block_index=head.block_index,
+            block_hash=head.block_hash,
+            block_mac=head.block_mac,
+        )
+
+    def _write_anchor(self, head) -> None:
+        write_audit_anchor(
+            self.audit_anchor_path,
+            self._audit_key,
+            block_index=head.block_index,
+            block_hash=head.block_hash,
+            block_mac=head.block_mac,
+        )
+
+    def _verify_anchor_in_transaction(
+        self, connection: sqlite3.Connection
+    ) -> None:
+        self._verify_anchor(latest_block(connection))
+
+    def _refresh_anchor(self) -> None:
+        connection = connect_database(self.database_path)
+        try:
+            self._write_anchor(latest_block(connection))
+        finally:
+            connection.close()
 
     @staticmethod
     def _envelope_from_version(version: StoredVersion) -> EncryptedEnvelope:
@@ -196,6 +258,7 @@ class RecordService:
             version=version,
             operation=operation,
             envelope_hash=envelope_hash,
+            audit_key=self._audit_key,
             actor_id=actor_id,
             actor_role=actor_role,
         )
@@ -219,6 +282,7 @@ class RecordService:
         connection = connect_database(self.database_path)
         try:
             with immediate_transaction(connection):
+                self._verify_anchor_in_transaction(connection)
                 if get_record_by_token(connection, lookup_token) is not None:
                     raise DuplicateStudentError("Mã sinh viên đã tồn tại.")
                 insert_record(
@@ -243,6 +307,7 @@ class RecordService:
             ) from exc
         finally:
             connection.close()
+        self._refresh_anchor()
 
         record = StoredRecord(
             record_id=record_id,
@@ -274,6 +339,7 @@ class RecordService:
         connection = connect_database(self.database_path)
         try:
             with immediate_transaction(connection):
+                self._verify_anchor_in_transaction(connection)
                 record = self._require_writable_record(connection, record_id)
                 self._check_version(record, expected_version)
                 owner = get_record_by_token(connection, lookup_token)
@@ -305,6 +371,7 @@ class RecordService:
             ) from exc
         finally:
             connection.close()
+        self._refresh_anchor()
 
         updated = StoredRecord(
             record_id=record.record_id,
@@ -331,6 +398,7 @@ class RecordService:
         connection = connect_database(self.database_path)
         try:
             with immediate_transaction(connection):
+                self._verify_anchor_in_transaction(connection)
                 record = self._require_writable_record(connection, record_id)
                 self._check_version(record, expected_version)
                 current = get_version(connection, record_id, record.current_version)
@@ -362,6 +430,7 @@ class RecordService:
             ) from exc
         finally:
             connection.close()
+        self._refresh_anchor()
 
         deleted = StoredRecord(
             record_id=record.record_id,
@@ -459,13 +528,19 @@ class RecordService:
 
     def verify_all(self) -> VerificationReport:
         return verify_database(
-            self.database_path, self._cipher, lookup_key=self._lookup_key
+            self.database_path,
+            self._cipher,
+            audit_key=self._audit_key,
+            audit_anchor_path=self.audit_anchor_path,
+            lookup_key=self._lookup_key,
         )
 
     def verify_student(self, record_id: str) -> VerificationReport:
         return verify_database(
             self.database_path,
             self._cipher,
+            audit_key=self._audit_key,
+            audit_anchor_path=self.audit_anchor_path,
             record_id=record_id,
             lookup_key=self._lookup_key,
         )

@@ -18,6 +18,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.blockchain.block import calculate_block_hash  # noqa: E402
 from src.config import Settings  # noqa: E402
 from src.services.record_service import RecordService  # noqa: E402
 from experiments.system_metadata import collect_system_metadata  # noqa: E402
@@ -95,13 +96,178 @@ def delete_middle_block(connection: sqlite3.Connection) -> None:
     connection.execute("DELETE FROM audit_blocks WHERE block_index = ?", (row[0],))
 
 
-MUTATIONS: dict[str, Mutation] = {
-    "thay_doi_ban_ma": mutate_ciphertext,
-    "thay_doi_the_xac_thuc": mutate_authentication_tag,
-    "thay_doi_nonce": mutate_nonce,
-    "thay_doi_bam_phong_bi": mutate_envelope_hash,
-    "thay_doi_lien_ket_khoi": mutate_previous_hash,
-    "xoa_khoi_giua": delete_middle_block,
+def _business_blocks(connection: sqlite3.Connection) -> list[dict[str, object]]:
+    connection.row_factory = sqlite3.Row
+    return [
+        dict(row)
+        for row in connection.execute(
+            "SELECT * FROM audit_blocks WHERE block_index > 0 "
+            "ORDER BY block_index"
+        ).fetchall()
+    ]
+
+
+def _rewrite_business_chain(
+    connection: sqlite3.Connection, rows: list[dict[str, object]]
+) -> None:
+    """Mô phỏng DB writer biết thuật toán hash nhưng không có audit key."""
+
+    genesis_hash = str(
+        connection.execute(
+            "SELECT block_hash FROM audit_blocks WHERE block_index = 0"
+        ).fetchone()[0]
+    )
+    connection.execute("DELETE FROM audit_blocks WHERE block_index > 0")
+    previous_hash = genesis_hash
+    for block_index, row in enumerate(rows, start=1):
+        block_hash = calculate_block_hash(
+            block_index=block_index,
+            timestamp=str(row["timestamp"]),
+            previous_hash=previous_hash,
+            record_id=str(row["record_id"]),
+            version=int(row["version"]),
+            operation=str(row["operation"]),
+            envelope_hash=str(row["envelope_hash"]),
+            block_schema_version=int(row["block_schema_version"]),
+            actor_id=str(row["actor_id"]),
+            actor_role=str(row["actor_role"]),
+        )
+        connection.execute(
+            """
+            INSERT INTO audit_blocks (
+                block_index, timestamp, previous_hash, record_id, version,
+                operation, envelope_hash, block_schema_version, actor_id,
+                actor_role, block_hash, block_mac
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                block_index,
+                row["timestamp"],
+                previous_hash,
+                row["record_id"],
+                row["version"],
+                row["operation"],
+                row["envelope_hash"],
+                row["block_schema_version"],
+                row["actor_id"],
+                row["actor_role"],
+                block_hash,
+                row["block_mac"],
+            ),
+        )
+        previous_hash = block_hash
+
+
+def modify_and_rehash(connection: sqlite3.Connection) -> None:
+    rows = _business_blocks(connection)
+    rows[0]["block_schema_version"] = 2
+    _rewrite_business_chain(connection, rows)
+
+
+def change_timestamp_and_rehash(connection: sqlite3.Connection) -> None:
+    rows = _business_blocks(connection)
+    changed_timestamp = "2030-01-01T00:00:00.000000Z"
+    rows[0]["timestamp"] = changed_timestamp
+    connection.execute(
+        "UPDATE record_versions SET created_at = ? "
+        "WHERE record_id = ? AND version = ?",
+        (changed_timestamp, rows[0]["record_id"], rows[0]["version"]),
+    )
+    _rewrite_business_chain(connection, rows)
+
+
+def delete_record_and_rechain(connection: sqlite3.Connection) -> None:
+    rows = _business_blocks(connection)
+    target = str(rows[1]["record_id"])
+    connection.execute("DELETE FROM record_versions WHERE record_id = ?", (target,))
+    connection.execute("DELETE FROM records WHERE record_id = ?", (target,))
+    _rewrite_business_chain(
+        connection,
+        [row for row in rows if str(row["record_id"]) != target],
+    )
+
+
+def truncate_suffix_and_repair_head(connection: sqlite3.Connection) -> None:
+    rows = _business_blocks(connection)
+    removed = rows.pop()
+    record_id = str(removed["record_id"])
+    version = int(removed["version"])
+    connection.execute(
+        "DELETE FROM record_versions WHERE record_id = ? AND version = ?",
+        (record_id, version),
+    )
+    previous = connection.execute(
+        "SELECT version, operation, created_at FROM record_versions "
+        "WHERE record_id = ? ORDER BY version DESC LIMIT 1",
+        (record_id,),
+    ).fetchone()
+    connection.execute(
+        "UPDATE records SET current_version = ?, status = ?, updated_at = ? "
+        "WHERE record_id = ?",
+        (
+            previous[0],
+            "deleted" if previous[1] == "DELETE" else "active",
+            previous[2],
+            record_id,
+        ),
+    )
+    _rewrite_business_chain(connection, rows)
+
+
+def splice_valid_histories(connection: sqlite3.Connection) -> None:
+    rows = _business_blocks(connection)
+    rows[0], rows[1] = rows[1], rows[0]
+    _rewrite_business_chain(connection, rows)
+
+
+def reorder_and_reindex(connection: sqlite3.Connection) -> None:
+    rows = _business_blocks(connection)
+    rows.reverse()
+    _rewrite_business_chain(connection, rows)
+
+
+def partial_record_rollback(connection: sqlite3.Connection) -> None:
+    rows = _business_blocks(connection)
+    updated = next(row for row in rows if int(row["version"]) > 1)
+    target = str(updated["record_id"])
+    connection.execute(
+        "DELETE FROM record_versions WHERE record_id = ? AND version > 1",
+        (target,),
+    )
+    prior = connection.execute(
+        "SELECT created_at FROM record_versions "
+        "WHERE record_id = ? AND version = 1",
+        (target,),
+    ).fetchone()
+    connection.execute(
+        "UPDATE records SET current_version = 1, status = 'active', "
+        "updated_at = ? WHERE record_id = ?",
+        (prior[0], target),
+    )
+    _rewrite_business_chain(
+        connection,
+        [
+            row
+            for row in rows
+            if not (str(row["record_id"]) == target and int(row["version"]) > 1)
+        ],
+    )
+
+
+MUTATIONS: dict[str, tuple[str, Mutation]] = {
+    "thay_doi_ban_ma": ("inconsistent_mutation", mutate_ciphertext),
+    "thay_doi_the_xac_thuc": ("inconsistent_mutation", mutate_authentication_tag),
+    "thay_doi_nonce": ("inconsistent_mutation", mutate_nonce),
+    "thay_doi_bam_phong_bi": ("inconsistent_mutation", mutate_envelope_hash),
+    "thay_doi_lien_ket_khoi": ("inconsistent_mutation", mutate_previous_hash),
+    "xoa_khoi_giua": ("inconsistent_mutation", delete_middle_block),
+    "sua_va_bam_lai": ("adaptive_db_writer", modify_and_rehash),
+    "sua_timestamp_va_bam_lai": ("adaptive_db_writer", change_timestamp_and_rehash),
+    "xoa_ho_so_va_noi_lai_chuoi": ("adaptive_db_writer", delete_record_and_rechain),
+    "cat_duoi_va_sua_head": ("adaptive_db_writer", truncate_suffix_and_repair_head),
+    "ghep_lich_su_hop_le": ("adaptive_db_writer", splice_valid_histories),
+    "sap_xep_va_danh_chi_muc_lai": ("adaptive_db_writer", reorder_and_reindex),
+    "rollback_rieng_mot_ho_so": ("adaptive_db_writer", partial_record_rollback),
 }
 
 
@@ -148,7 +314,7 @@ def run_trials(
     *, trials: int, key: bytes, key_id: str
 ) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
-    for case_name, mutation in MUTATIONS.items():
+    for case_name, (attacker_model, mutation) in MUTATIONS.items():
         for trial in range(1, trials + 1):
             print(f"Trường hợp {case_name}, lần {trial}/{trials}")
             with tempfile.TemporaryDirectory(prefix="student-record-tamper-") as temp_dir:
@@ -164,6 +330,7 @@ def run_trials(
                 rows.append(
                     {
                         "case": case_name,
+                        "attacker_model": attacker_model,
                         "trial": trial,
                         "detected": int(not report.valid),
                         "message_count": len(report.messages),
@@ -181,7 +348,14 @@ def write_results(rows: list[dict[str, object]], output_dir: Path) -> tuple[Path
     with raw_path.open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=["case", "trial", "detected", "message_count", "messages"],
+            fieldnames=[
+                "case",
+                "attacker_model",
+                "trial",
+                "detected",
+                "message_count",
+                "messages",
+            ],
         )
         writer.writeheader()
         writer.writerows(rows)
@@ -189,15 +363,22 @@ def write_results(rows: list[dict[str, object]], output_dir: Path) -> tuple[Path
     with summary_path.open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=["case", "trials", "detected", "detection_rate"],
+            fieldnames=[
+                "case",
+                "attacker_model",
+                "trials",
+                "detected",
+                "detection_rate",
+            ],
         )
         writer.writeheader()
-        for case_name in MUTATIONS:
+        for case_name, (attacker_model, _mutation) in MUTATIONS.items():
             selected = [row for row in rows if row["case"] == case_name]
             detected = sum(int(row["detected"]) for row in selected)
             writer.writerow(
                 {
                     "case": case_name,
+                    "attacker_model": attacker_model,
                     "trials": len(selected),
                     "detected": detected,
                     "detection_rate": detected / len(selected),

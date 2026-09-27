@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 
 from src.blockchain.block import genesis_block
+from src.integrity import derive_audit_key
 from src.services.record_service import RecordService
 
 
@@ -20,9 +21,12 @@ def _student(code: str = "SV001") -> dict:
 
 
 def test_genesis_is_fixed() -> None:
-    assert genesis_block() == genesis_block()
-    assert genesis_block().block_index == 0
-    assert genesis_block().expected_hash() == genesis_block().block_hash
+    audit_key = derive_audit_key(b"g" * 32)
+    genesis = genesis_block(audit_key)
+    assert genesis == genesis_block(audit_key)
+    assert genesis.block_index == 0
+    assert genesis.expected_hash() == genesis.block_hash
+    assert genesis.has_valid_mac(audit_key)
 
 
 def test_blocks_link_create_update_delete(tmp_path) -> None:
@@ -48,7 +52,8 @@ def test_blocks_link_create_update_delete(tmp_path) -> None:
         "system",
         "system",
     ]
-    assert [item["block_schema_version"] for item in blocks] == [1, 2, 2, 2]
+    assert [item["block_schema_version"] for item in blocks] == [3, 3, 3, 3]
+    assert all(len(item["block_mac"]) == 64 for item in blocks)
     for previous, current in zip(blocks, blocks[1:]):
         assert current["previous_hash"] == previous["block_hash"]
 

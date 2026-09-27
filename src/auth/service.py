@@ -12,7 +12,7 @@ from pathlib import Path
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from src.database.connection import connect_database, immediate_transaction
-from src.database.schema import initialize_database
+from src.database.schema import initialize_authentication_database
 
 
 ALLOWED_ROLES = frozenset({"admin", "registrar", "auditor"})
@@ -145,7 +145,7 @@ class AuthenticationService:
         self.lockout_minutes = lockout_minutes
 
     def initialize(self) -> None:
-        initialize_database(self.database_path)
+        initialize_authentication_database(self.database_path)
 
     def create_user(
         self,

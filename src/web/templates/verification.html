@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "_icons.html" import icon %}
-{% block title %}Xác minh dữ liệu | SecureEdu Blockchain{% endblock %}
+{% block title %}Xác minh dữ liệu | SecureEdu Audit Ledger{% endblock %}
 {% block content %}
 <header class="page-header">
   <div><span class="eyebrow">Security verification center</span><h1>Xác minh tính toàn vẹn</h1><p>Kiểm tra đồng thời thẻ xác thực AES-GCM, dấu vết SHA-256 và liên kết giữa các khối.</p></div>
@@ -18,7 +18,7 @@
       <div class="check-list" aria-label="Ba lớp được kiểm tra">
         <div><span class="check-number">{{ icon('lock', 18) }}</span><p><strong>Xác thực AES-GCM</strong><small>Phát hiện bản mã, nonce hoặc ngữ cảnh bị thay đổi.</small></p></div>
         <div><span class="check-number">{{ icon('hash', 18) }}</span><p><strong>Đối chiếu SHA-256</strong><small>So sánh gói lưu trữ với dấu vết trong khối.</small></p></div>
-        <div><span class="check-number">{{ icon('blocks', 18) }}</span><p><strong>Kiểm tra Blockchain</strong><small>Tính lại khối và xác nhận thứ tự liên kết.</small></p></div>
+        <div><span class="check-number">{{ icon('blocks', 18) }}</span><p><strong>Kiểm tra nhật ký audit</strong><small>Xác minh block hash, HMAC, thứ tự liên kết và checkpoint.</small></p></div>
       </div>
       <button class="button button-primary button-full" type="submit" data-submit-label="Đang kiểm tra dữ liệu…">{{ icon('activity') }} <span>Bắt đầu xác minh</span></button>
     </form>

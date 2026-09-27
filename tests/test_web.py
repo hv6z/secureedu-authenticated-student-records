@@ -101,7 +101,7 @@ def _student_form(csrf_token: str | None = None) -> dict:
 def test_main_pages_are_available(client, path) -> None:
     response = client.get(path)
     assert response.status_code == 200
-    assert b"SecureEdu Blockchain" in response.data
+    assert b"SecureEdu Audit Ledger" in response.data
     assert b'data-theme-toggle' in response.data
     assert b'/static/js/theme.js' in response.data
     assert b'content="light dark"' in response.data
@@ -205,7 +205,7 @@ def test_web_write_records_authenticated_actor(client, app) -> None:
     assert admin is not None
     assert block["actor_id"] == admin.user_id
     assert block["actor_role"] == "admin"
-    assert block["block_schema_version"] == 2
+    assert block["block_schema_version"] == 3
 
 
 def test_create_update_verify_and_delete_student(client) -> None:

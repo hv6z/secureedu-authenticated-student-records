@@ -13,6 +13,7 @@ from src.integrity import (
     calculate_lookup_token,
     canonical_json_bytes,
     derive_lookup_key,
+    derive_audit_key,
     make_aad,
 )
 from src.services.record_service import RecordService
@@ -78,7 +79,9 @@ def test_schema_v1_is_migrated_and_remains_verifiable(tmp_path) -> None:
     envelope_hash = calculate_envelope_hash(
         record_id, 1, "CREATE", envelope
     )
-    genesis = genesis_block()
+    genesis = genesis_block(
+        derive_audit_key(key), block_schema_version=1
+    )
     create_hash = calculate_block_hash(
         block_index=1,
         timestamp=timestamp,

@@ -13,8 +13,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#1e3a5f">
-  <meta name="description" content="SecureEdu Blockchain — bảo mật và kiểm chứng hồ sơ sinh viên bằng AES-GCM và chuỗi liên kết băm.">
-  <title>{% block title %}SecureEdu Blockchain{% endblock %}</title>
+  <meta name="description" content="SecureEdu Audit Ledger — hồ sơ sinh viên phiên bản với AES-GCM, HMAC audit và checkpoint ngoài SQLite.">
+  <title>{% block title %}SecureEdu Audit Ledger{% endblock %}</title>
   <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
   <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -26,7 +26,7 @@
       <a class="brand" href="{{ url_for('web.dashboard') if current_user else url_for('auth.login') }}" aria-label="{{ 'Về bảng điều khiển' if current_user else 'Về trang đăng nhập' }}">
         <span class="brand-mark">{{ icon('shield', 25) }}</span>
         <span class="brand-copy">
-          <strong>SecureEdu <b>Blockchain</b></strong>
+          <strong>SecureEdu <b>Audit Ledger</b></strong>
           <small>AES-GCM · RBAC · Audit trail</small>
         </span>
       </a>
@@ -40,7 +40,7 @@
           <div class="nav-links">
             <a class="{{ 'active' if request.endpoint == 'web.dashboard' else '' }}" href="{{ url_for('web.dashboard') }}">{{ icon('home') }}<span>Tổng quan</span></a>
             <a class="{{ 'active' if request.endpoint in ['web.students', 'web.new_student', 'web.student_detail', 'web.edit_student'] else '' }}" href="{{ url_for('web.students') }}">{{ icon('users') }}<span>Hồ sơ</span></a>
-            <a class="{{ 'active' if request.endpoint == 'web.blockchain' else '' }}" href="{{ url_for('web.blockchain') }}">{{ icon('blocks') }}<span>Blockchain</span></a>
+            <a class="{{ 'active' if request.endpoint == 'web.blockchain' else '' }}" href="{{ url_for('web.blockchain') }}">{{ icon('blocks') }}<span>Nhật ký audit</span></a>
             <a class="{{ 'active' if request.endpoint == 'web.verification' else '' }}" href="{{ url_for('web.verification') }}">{{ icon('verify') }}<span>Xác minh</span></a>
           </div>
           <div class="nav-account">
@@ -84,7 +84,7 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <p><strong>SecureEdu Blockchain</strong> · Bảo mật hồ sơ sinh viên với AES-GCM và Blockchain.</p>
+      <p><strong>SecureEdu Audit Ledger</strong> · Hồ sơ phiên bản với AES-GCM và nhật ký kiểm toán có xác thực.</p>
       <p>Proof of concept phục vụ nghiên cứu và báo cáo thực tập.</p>
     </div>
   </footer>

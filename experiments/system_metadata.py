@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ctypes
+import hashlib
 import platform
 import subprocess
 from ctypes import wintypes
@@ -64,6 +65,44 @@ def _git_commit(project_root: Path) -> str:
     return completed.stdout.strip() or "unknown"
 
 
+def _git_dirty(project_root: Path) -> bool | None:
+    try:
+        completed = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=project_root,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return bool(completed.stdout.strip())
+
+
+def _source_tree_sha256(project_root: Path) -> str:
+    """Băm mã thực thi, độc lập với commit và tệp kết quả sinh ra."""
+
+    digest = hashlib.sha256()
+    candidates: list[Path] = []
+    for relative_root in ("src", "experiments", "scripts", "tests"):
+        candidates.extend((project_root / relative_root).rglob("*.py"))
+    candidates.extend(
+        project_root / name
+        for name in (
+            "pytest.ini",
+            "requirements.txt",
+            "requirements-dev.txt",
+            "requirements-lock.txt",
+        )
+        if (project_root / name).is_file()
+    )
+    for path in sorted(candidates, key=lambda item: item.as_posix()):
+        relative = path.relative_to(project_root).as_posix().encode("utf-8")
+        digest.update(relative + b"\x00" + path.read_bytes() + b"\x00")
+    return digest.hexdigest()
+
+
 def collect_system_metadata(project_root: Path) -> dict[str, object]:
     memory_bytes = _total_physical_memory_bytes()
     return {
@@ -73,4 +112,6 @@ def collect_system_metadata(project_root: Path) -> dict[str, object]:
             round(memory_bytes / (1024**3), 2) if memory_bytes is not None else None
         ),
         "source_commit": _git_commit(project_root),
+        "source_dirty": _git_dirty(project_root),
+        "source_tree_sha256": _source_tree_sha256(project_root),
     }

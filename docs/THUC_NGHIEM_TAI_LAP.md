@@ -1,6 +1,6 @@
 # Hướng dẫn tái lập thực nghiệm
 
-Tài liệu này mô tả cách tạo lại các kết quả hiệu năng và kiểm tra phát hiện can thiệp được báo cáo trong bài FAIR 2026. Toàn bộ dữ liệu đầu vào là dữ liệu mô phỏng, không chứa hồ sơ sinh viên thật.
+Tài liệu này mô tả cách tạo lại các kết quả hiệu năng và kiểm tra phát hiện can thiệp cho bản sửa REV-ECIT 2026. Toàn bộ dữ liệu đầu vào là dữ liệu mô phỏng, không chứa hồ sơ sinh viên thật. Kết quả hiệu năng FAIR thuộc thiết kế hash-chain không khóa và không được tái sử dụng như kết quả của thiết kế mới.
 
 ## 1. Phiên bản mã nguồn
 
@@ -62,11 +62,11 @@ Không chỉnh sửa số liệu thô bằng tay. Nếu cần loại bỏ một 
 python experiments/tamper_test.py --trials 30 --output-dir experiments/results
 ```
 
-Kết quả gồm sáu kiểu can thiệp, mỗi kiểu 30 lần. Tệp `tamper_raw_*.csv`, `tamper_summary_*.csv` và `tamper_metadata_*.json` phải được lưu cùng nhau.
+Kết quả gồm 13 kiểu can thiệp, mỗi kiểu 30 lần: sáu mutation không sửa trạng thái phụ thuộc và bảy chiến lược DB writer thích nghi. Tệp `tamper_raw_*.csv`, `tamper_summary_*.csv` và `tamper_metadata_*.json` phải được lưu cùng nhau. Metadata phải có `source_dirty` và `source_tree_sha256`; chỉ ghi commit là chưa đủ khi phép đo chạy trên working tree chưa commit.
 
 ## 6. Kiểm tra trước khi dùng trong bài báo
 
-- Xác nhận `113/113` kiểm thử vượt qua và độ bao phủ không dưới 90%.
+- Xác nhận `116/116` kiểm thử vượt qua và độ bao phủ không dưới 90%.
 - Xác nhận mỗi cặp cấu hình/kích thước có đúng 30 lần lặp.
 - Đối chiếu trực tiếp các giá trị trong bảng bài báo với `summary_*.csv`.
 - Ghi rõ commit, môi trường máy chạy, thời điểm chạy và seed.
@@ -75,11 +75,19 @@ Kết quả gồm sáu kiểu can thiệp, mỗi kiểu 30 lần. Tệp `tamper_
 
 ## 7. Công bố trên GitHub
 
-Repository: https://github.com/hv6z/secure_student_record_blockchain
+Repository: https://github.com/hv6z/secureedu-authenticated-student-records
 
 Khi cập nhật kết quả, commit đồng thời script, dữ liệu thô, thống kê, metadata và tài liệu này. Không công bố khóa AES, mật khẩu, tệp `.env`, cơ sở dữ liệu thật hoặc dữ liệu nhận dạng cá nhân.
 
-## 8. Bộ kết quả dùng cho bản FAIR 2026 hiện tại
+## 8. Bộ kết quả can thiệp của thiết kế REV ECIT
+
+| Phạm vi | Dữ liệu thô | Thống kê | Metadata | Số phép thử |
+|---|---|---|---|---:|
+| 6 mutation không nhất quán và 7 tấn công thích nghi | `tamper_raw_20260925T065010Z.csv` | `tamper_summary_20260925T065010Z.csv` | `tamper_metadata_20260925T065010Z.json` | 390 |
+
+Tất cả 390 trạng thái bị sửa đều bị verifier từ chối. Đây là kết quả quyết định trên các kịch bản đã định nghĩa, không phải xác suất phát hiện mọi tấn công. Metadata ghi `source_dirty=true` và SHA-256 của cây source vì phép đo được chạy trước khi tạo commit mới.
+
+## 9. Bộ kết quả FAIR chỉ để lưu trữ
 
 Để tránh mất toàn bộ dữ liệu khi phép đo 10.000 hồ sơ kéo dài, bộ 30 lần lặp được chạy thành hai chặng liên tiếp trên cùng máy, cùng phiên bản phần mềm và cùng seed:
 
@@ -91,4 +99,4 @@ Khi cập nhật kết quả, commit đồng thời script, dữ liệu thô, th
 
 Hai chặng hiệu năng cùng dùng Windows 11, Intel Core i5-10300H, 7,84 GiB RAM, Python 3.12.13, SQLite 3.50.4, Flask 3.1.3, cryptography 49.0.0 và commit `18d5f84297a4f7d24173362d2234a0a15eeafb2d`. Tổng cộng có 270 phép đo hiệu năng; mỗi cặp cấu hình/kích thước có đúng 30 lần lặp.
 
-Các tệp có timestamp `20260712` là dữ liệu lưu trữ từ schema cũ và không được dùng cho bảng kết quả của bản FAIR 2026 hiện tại.
+Toàn bộ tệp hiệu năng và can thiệp FAIR, kể cả timestamp `20260712` và `20260809`, là dữ liệu lưu trữ từ thiết kế cũ và không được dùng cho bảng kết quả của bản REV-ECIT.

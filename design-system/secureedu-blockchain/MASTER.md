@@ -6,7 +6,7 @@
 
 ---
 
-**Project:** SecureEdu Blockchain
+**Project:** SecureEdu Audit Ledger
 **Generated:** 2026-07-27 17:23:44
 **Category:** Password Manager
 **Design Dials:** Variance 5/10 (Balanced / Modern) | Motion 3/10 (Subtle) | Density 7/10 (Standard)
