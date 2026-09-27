@@ -4,7 +4,7 @@
 
 Hệ thống quản lý hồ sơ sinh viên có mã hóa và kiểm chứng toàn vẹn, xây dựng bằng Python, Flask và SQLite.
 
-![Python 3.12](https://img.shields.io/badge/Python-3.12-2563EB) ![Tests](https://img.shields.io/badge/tests-116%20passed-16A34A) ![Coverage](https://img.shields.io/badge/coverage-90.81%25-16A34A) ![UI](https://img.shields.io/badge/UI-responsive-1E3A5F)
+![Python 3.12](https://img.shields.io/badge/Python-3.12-2563EB) ![Tests](https://img.shields.io/badge/tests-117%20passed-16A34A) ![Coverage](https://img.shields.io/badge/coverage-90.82%25-16A34A) ![UI](https://img.shields.io/badge/UI-responsive-1E3A5F)
 
 > **Trạng thái:** proof-of-concept phục vụ nghiên cứu. Mỗi block có HMAC từ khóa audit tách miền và head mới nhất được checkpoint ngoài SQLite. Hệ thống **không phải mạng blockchain phân tán**; checkpoint phải được đặt trên miền lưu trữ mà DB writer không thể sửa. Hệ thống chưa có KMS/HSM và chưa phù hợp để triển khai với dữ liệu sinh viên thật.
 
@@ -29,8 +29,8 @@ Mã sinh viên không được lưu ở dạng rõ. Hệ thống dẫn xuất m�
 
 | Hạng mục | Kết quả cập nhật ngày 27/09/2026 |
 |---|---|
-| Kiểm thử tự động | 116/116 đạt |
-| Độ bao phủ mã nguồn | 90,81%; ngưỡng bắt buộc ≥ 90% |
+| Kiểm thử tự động | 117/117 đạt |
+| Độ bao phủ mã nguồn | 90,82%; ngưỡng bắt buộc ≥ 90% |
 | Kiểm tra cú pháp Python | Đạt |
 | Cài đặt từ `requirements-lock.txt` | Đạt trên Python 3.12 |
 | Thử can thiệp, 13 kịch bản × 30 lần | Từ chối 390/390 trạng thái bị sửa; gồm 210 lần thử DB writer thích nghi |
@@ -44,6 +44,10 @@ Mã sinh viên không được lưu ở dạng rõ. Hệ thống dẫn xuất m�
 Giao diện được thiết kế lại theo hướng dashboard bảo mật doanh nghiệp: responsive, điều hướng bàn phím, focus rõ, icon SVG thống nhất, trạng thái không chỉ dựa vào màu và hỗ trợ `prefers-reduced-motion`. Chế độ sáng/tối tự nhận thiết lập hệ thống ở lần đầu, cho phép chuyển nhanh trên thanh điều hướng và ghi nhớ lựa chọn ngay trong trình duyệt.
 
 ![Dashboard SecureEdu Audit Ledger](docs/screenshots/dashboard-desktop.png)
+
+**Nhật ký kiểm toán hiển thị HMAC từng khối và trạng thái checkpoint**
+
+![Nhật ký kiểm toán SecureEdu Audit Ledger](docs/screenshots/audit-desktop.png)
 
 **Chế độ tối trên dashboard và cổng đăng nhập**
 

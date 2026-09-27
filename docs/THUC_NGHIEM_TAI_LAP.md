@@ -66,7 +66,7 @@ Kết quả gồm 13 kiểu can thiệp, mỗi kiểu 30 lần: sáu mutation kh
 
 ## 6. Kiểm tra trước khi dùng trong bài báo
 
-- Xác nhận `116/116` kiểm thử vượt qua và độ bao phủ không dưới 90%.
+- Xác nhận `117/117` kiểm thử vượt qua và độ bao phủ không dưới 90%.
 - Xác nhận mỗi cặp cấu hình/kích thước có đúng 30 lần lặp.
 - Đối chiếu trực tiếp các giá trị trong bảng bài báo với `summary_*.csv`.
 - Ghi rõ commit, môi trường máy chạy, thời điểm chạy và seed.

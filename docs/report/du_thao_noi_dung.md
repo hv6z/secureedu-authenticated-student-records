@@ -2,7 +2,7 @@
 
 ## trạng thái tài liệu
 
-Tệp này đang được sửa sau phản biện FAIR 2026. Phiên bản mã nguồn mới có HMAC cho từng block, checkpoint head ngoài SQLite, 116 kiểm thử tự động và độ bao phủ 90,81%. Các số liệu hiệu năng ngày 12/07/2026 thuộc thiết kế cũ và chỉ được giữ làm dấu vết; không dùng làm kết quả của bản REV-ECIT trước khi chạy lại.
+Tệp này đang được sửa sau phản biện FAIR 2026. Phiên bản mã nguồn mới có HMAC cho từng block, checkpoint head ngoài SQLite, 117 kiểm thử tự động và độ bao phủ 90,82%. Các số liệu hiệu năng ngày 12/07/2026 thuộc thiết kế cũ và chỉ được giữ làm dấu vết; không dùng làm kết quả của bản REV-ECIT trước khi chạy lại.
 
 Bộ số liệu 30 lần lặp được tạo trước đợt bổ sung đăng nhập/RBAC và actor schema v2 ngày 20/07/2026. Chức năng mới đã qua kiểm thử và chạy benchmark nhanh, nhưng phải chạy lại bộ 30 lần lặp trước khi dùng số hiệu năng như kết quả cuối của phiên bản hiện tại.
 
@@ -183,8 +183,8 @@ Giao diện được thiết kế theo hướng dashboard bảo mật doanh nghi
 
 | chỉ tiêu | kết quả ngày 27/09/2026 |
 |---|---|
-| kiểm thử tự động | 116/116 đạt |
-| độ bao phủ mã nguồn | 90,81% tổng thể |
+| kiểm thử tự động | 117/117 đạt |
+| độ bao phủ mã nguồn | 90,82% tổng thể |
 | ngưỡng coverage bắt buộc | tối thiểu 90% |
 | kiểm tra phụ thuộc | không có phụ thuộc hỏng |
 | kiểm tra giao diện Chrome | đạt ở 375 px và 1440 px; không tràn ngang |

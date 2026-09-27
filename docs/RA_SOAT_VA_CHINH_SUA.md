@@ -34,8 +34,8 @@ Hệ thống **chưa đạt mức triển khai với dữ liệu thật** vì ch
 | Cài `requirements-lock.txt` trong môi trường mới | Đạt |
 | `pip check` | Không có phụ thuộc hỏng |
 | Biên dịch toàn bộ tệp Python | Đạt |
-| Kiểm thử tự động | 116/116 đạt |
-| Độ bao phủ | 90,81% tổng thể |
+| Kiểm thử tự động | 117/117 đạt |
+| Độ bao phủ | 90,82% tổng thể |
 | Benchmark FAIR đã lưu | Giữ để tham chiếu; cần chạy lại sau thay đổi schema v4 |
 | Tamper test sau nâng cấp | 13 kiểu × 30 lần; 390/390 phát hiện |
 | Migration database schema v1-v3 lên v4 | Đạt; backfill `block_mac` và checkpoint |
@@ -98,7 +98,7 @@ Workspace là clone độc lập của repository. Đợt sửa đã được ki
 6. Bổ sung `users`, trang đăng nhập, session hết hạn, lockout và RBAC.
 7. Bổ sung `scripts/manage_user.py` để tạo, liệt kê, đổi mật khẩu/vai trò và vô hiệu hóa tài khoản.
 8. Nâng schema mật mã/block lên v2 để bảo vệ `actor_id`/role, kèm migration v1.
-9. Bổ sung kiểm thử nhánh bảo mật và đặt ngưỡng coverage bắt buộc 90%; kết quả hiện tại 116/116 test, 90,81%.
+9. Bổ sung kiểm thử nhánh bảo mật và đặt ngưỡng coverage bắt buộc 90%; kết quả hiện tại 117/117 test, 90,82%.
 10. Đổi tên giao diện thành **SecureEdu Audit Ledger**, giữ route/package nội bộ `blockchain` để tương thích.
 11. Kiểm tra thực tế bằng Chrome ở 1440 px và 375 px; không có tràn ngang, menu mobile và luồng đăng nhập hoạt động.
 12. Nâng schema lên v4 với `block_mac`, checkpoint ngoài SQLite và bộ thử 13 kiểu can thiệp, gồm các ca thích nghi.

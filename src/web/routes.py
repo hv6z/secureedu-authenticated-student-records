@@ -198,13 +198,18 @@ def delete_student(record_id: str):
     except (RecordServiceError, ValueError, KeyError) as error:
         flash(_friendly_error(error), "error")
         return redirect(url_for("web.student_detail", record_id=record_id))
-    flash("Đã xóa hồ sơ và ghi lại thao tác trong chuỗi kiểm toán.", "success")
+    flash("Đã xóa hồ sơ và ghi lại thao tác trong nhật ký kiểm toán.", "success")
     return redirect(url_for("web.students"))
 
 
 @web.get("/blockchain")
 def blockchain():
-    return render_template("blockchain.html", blocks=_service().list_blocks())
+    service = _service()
+    return render_template(
+        "blockchain.html",
+        blocks=service.list_blocks(),
+        report=service.verify_all(),
+    )
 
 
 @web.route("/verification", methods=["GET", "POST"])

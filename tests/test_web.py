@@ -107,6 +107,16 @@ def test_main_pages_are_available(client, path) -> None:
     assert b'content="light dark"' in response.data
 
 
+def test_audit_page_surfaces_hmac_and_checkpoint_status(client, app) -> None:
+    response = client.get("/blockchain")
+    block_mac = app.extensions["record_service"].list_blocks()[0]["block_mac"]
+
+    assert response.status_code == 200
+    assert b"Block HMAC" in response.data
+    assert "Đã đối chiếu".encode("utf-8") in response.data
+    assert block_mac.encode("ascii") in response.data
+
+
 def test_anonymous_user_is_redirected_to_login(anonymous_client) -> None:
     response = anonymous_client.get("/students", follow_redirects=False)
     assert response.status_code == 302

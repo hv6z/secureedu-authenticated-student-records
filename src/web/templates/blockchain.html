@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% from "_icons.html" import icon %}
-{% block title %}Nhật ký audit | SecureEdu Audit Ledger{% endblock %}
+{% block title %}Nhật ký kiểm toán | SecureEdu Audit Ledger{% endblock %}
 {% block content %}
 <header class="page-header">
-  <div><span class="eyebrow">Authenticated audit ledger</span><h1>Nhật ký kiểm toán có xác thực</h1><p>Mỗi thay đổi tạo một block liên kết với block trước và được xác thực bằng HMAC.</p></div>
-  <a class="button button-secondary" href="{{ url_for('web.verification') }}">{{ icon('verify') }} Kiểm tra toàn chuỗi</a>
+  <div><span class="eyebrow">Nhật ký xác thực một nút</span><h1>Nhật ký kiểm toán có xác thực</h1><p>Mỗi thay đổi tạo một khối liên kết với khối trước và được xác thực bằng HMAC khóa bí mật.</p></div>
+  <a class="button button-secondary" href="{{ url_for('web.verification') }}">{{ icon('verify') }} Kiểm tra toàn bộ nhật ký</a>
 </header>
 
-<div class="notice notice-info">{{ icon('blocks') }}<div><strong>Authenticated audit log một nút</strong><span>HMAC bảo vệ từng block; checkpoint ngoài SQLite giúp phát hiện rollback trong ranh giới tin cậy đã nêu.</span></div></div>
+<div class="notice notice-info">{{ icon('blocks') }}<div><strong>Ranh giới bảo vệ được công bố rõ</strong><span>HMAC bảo vệ từng khối; checkpoint ngoài SQLite giúp phát hiện rollback khi người ghi database không có khóa audit và không sửa được checkpoint.</span></div></div>
 
-<section class="chain-summary" aria-label="Tổng quan chuỗi">
+<section class="chain-summary" aria-label="Tổng quan nhật ký kiểm toán">
   <div>{{ icon('blocks', 21) }}<span>Tổng số khối</span><strong>{{ blocks|length }}</strong></div>
-  <div>{{ icon('hash', 21) }}<span>Thuật toán băm</span><strong>SHA-256</strong></div>
-  <div>{{ icon('shield', 21) }}<span>Cơ chế dữ liệu</span><strong>Append-only</strong></div>
+  <div>{{ icon('hash', 21) }}<span>Băm và xác thực</span><strong>SHA-256 · HMAC</strong></div>
+  <div>{{ icon('shield', 21) }}<span>Checkpoint hiện tại</span><strong class="{{ 'summary-valid' if report.valid else 'summary-invalid' }}">{{ 'Đã đối chiếu' if report.valid else 'Có cảnh báo' }}</strong></div>
 </section>
 
 <section class="chain-list" aria-label="Danh sách khối">
@@ -33,9 +33,10 @@
           <div><span>Previous hash</span><code title="{{ block.previous_hash }}">{{ block.previous_hash }}</code></div>
           <div><span>Envelope hash</span><code title="{{ block.envelope_hash }}">{{ block.envelope_hash }}</code></div>
           <div class="current-hash"><span>Current block hash</span><code title="{{ block.block_hash }}">{{ block.block_hash }}</code></div>
+          <div class="block-mac"><span>Block HMAC</span><code title="{{ block.block_mac }}">{{ block.block_mac }}</code></div>
         </div>
       </div>
     </article>
-  {% else %}<div class="empty-state panel"><span class="empty-icon">{{ icon('blocks', 30) }}</span><h2>Chuỗi chưa được khởi tạo</h2><p>Hãy khởi tạo cơ sở dữ liệu trước khi sử dụng.</p></div>{% endfor %}
+  {% else %}<div class="empty-state panel"><span class="empty-icon">{{ icon('blocks', 30) }}</span><h2>Nhật ký chưa được khởi tạo</h2><p>Hãy khởi tạo cơ sở dữ liệu trước khi sử dụng.</p></div>{% endfor %}
 </section>
 {% endblock %}
